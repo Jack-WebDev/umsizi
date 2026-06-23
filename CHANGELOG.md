@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.4.0
+
+### Minor Changes
+
+- 4e39a0b: Fix the root `umsizi` entrypoint accidentally re-exporting `normalizePathname`, `hasFileExtension`, and `isRenderFunction` from the `next`/`node`/`react` subpackages. The root import now only contains the framework-agnostic core utilities, as documented; import the framework-specific helpers from `umsizi/next`, `umsizi/node`, and `umsizi/react` instead.
+
 ## 0.3.0
 
 ### Minor Changes
