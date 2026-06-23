@@ -187,7 +187,7 @@ Umsizi follows [semantic versioning](https://semver.org/). While the package is 
 - Patch versions (`0.0.x`) are bug fixes only.
 - Once the API stabilizes, `1.0.0` will commit to standard semver guarantees (breaking changes only on major versions).
 
-Releases are managed via [Changesets](https://github.com/changesets/changesets); see the generated `CHANGELOG.md` (created on first release) for version history.
+Releases are managed via [Changesets](https://github.com/changesets/changesets) and npm trusted publishing from GitHub Actions; see the generated `CHANGELOG.md` for version history.
 
 ---
 
