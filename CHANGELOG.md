@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.2.2
+
+### Patch Changes
+
+- 1f08f8d: update ci
+
 ## 0.2.1
 
 ### Patch Changes
