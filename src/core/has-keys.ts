@@ -1,9 +1,3 @@
-import {
-	getMissingKeys,
-	isPlainObjectLike,
-	resolveKeys,
-} from "./object-key-helpers";
-
 /**
  * Checks whether a plain object has all of the requested own keys.
  *
@@ -38,11 +32,25 @@ export function hasKeys<T extends object>(
 	firstKeyOrKeys: keyof T | readonly (keyof T)[],
 	...restKeys: readonly (keyof T)[]
 ): boolean {
-	if (!isPlainObjectLike(value)) {
+	if (value === null || typeof value !== "object") {
 		return false;
 	}
 
-	const keys = resolveKeys(firstKeyOrKeys, restKeys);
+	const prototype = Object.getPrototypeOf(value);
 
-	return getMissingKeys(value, keys).length === 0;
+	if (prototype !== Object.prototype && prototype !== null) {
+		return false;
+	}
+
+	const keys = Array.isArray(firstKeyOrKeys)
+		? firstKeyOrKeys
+		: ([firstKeyOrKeys, ...restKeys] as readonly (keyof T)[]);
+
+	for (const key of keys) {
+		if (!Object.hasOwn(value, key)) {
+			return false;
+		}
+	}
+
+	return true;
 }

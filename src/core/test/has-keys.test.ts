@@ -13,6 +13,22 @@ describe("hasKeys", () => {
 		expect(hasKeys(value, "id")).toBe(true);
 	});
 
+	it("returns false for null and non-object values", () => {
+		expect(hasKeys(null as never as { id?: string }, "id")).toBe(false);
+		expect(hasKeys("umsizi" as never as { id?: string }, "id")).toBe(false);
+	});
+
+	it("returns false for non-plain objects", () => {
+		class User {
+			constructor(readonly id: string) {}
+		}
+
+		expect(hasKeys([] as never as Array<unknown> & { id?: string }, "id")).toBe(
+			false,
+		);
+		expect(hasKeys(new User("1") as User & { id?: string }, "id")).toBe(false);
+	});
+
 	it("returns false for missing and inherited keys", () => {
 		const base = { inherited: true };
 		const value = Object.create(base) as { id: string; inherited?: boolean };

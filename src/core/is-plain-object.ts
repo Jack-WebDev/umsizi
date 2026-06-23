@@ -1,5 +1,3 @@
-import { isPlainObjectLike } from "./object-key-helpers";
-
 /**
  * Checks whether a value is a plain object with a prototype of
  * `Object.prototype` or `null`.
@@ -19,5 +17,11 @@ import { isPlainObjectLike } from "./object-key-helpers";
 export function isPlainObject(
 	value: unknown,
 ): value is Record<PropertyKey, unknown> {
-	return isPlainObjectLike(value);
+	if (value === null || typeof value !== "object") {
+		return false;
+	}
+
+	const prototype = Object.getPrototypeOf(value);
+
+	return prototype === Object.prototype || prototype === null;
 }

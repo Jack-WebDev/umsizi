@@ -1,10 +1,4 @@
 import { hasKeys } from "./has-keys";
-import {
-	formatMissingKeys,
-	getMissingKeys,
-	isPlainObjectLike,
-	resolveKeys,
-} from "./object-key-helpers";
 
 /**
  * Requires that a plain object has all of the requested own keys.
@@ -40,17 +34,31 @@ export function requireKeys<T extends object>(
 	firstKeyOrKeys: keyof T | readonly (keyof T)[],
 	...restKeys: readonly (keyof T)[]
 ): T {
-	const keys = resolveKeys(firstKeyOrKeys, restKeys);
+	const keys = Array.isArray(firstKeyOrKeys)
+		? firstKeyOrKeys
+		: ([firstKeyOrKeys, ...restKeys] as readonly (keyof T)[]);
 
 	if (hasKeys(value, keys)) {
 		return value;
 	}
 
-	const missingKeys = isPlainObjectLike(value)
-		? getMissingKeys(value, keys)
-		: keys;
+	const missingKeys: Array<keyof T> = [];
 
-	throw new TypeError(
-		`Missing required keys: ${formatMissingKeys(missingKeys)}`,
-	);
+	if (value !== null && typeof value === "object") {
+		const prototype = Object.getPrototypeOf(value);
+
+		if (prototype === Object.prototype || prototype === null) {
+			for (const key of keys) {
+				if (!Object.hasOwn(value, key)) {
+					missingKeys.push(key);
+				}
+			}
+		}
+	}
+
+	if (missingKeys.length === 0) {
+		missingKeys.push(...keys);
+	}
+
+	throw new TypeError(`M:${missingKeys.map(String).join()}`);
 }

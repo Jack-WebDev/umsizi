@@ -1,4 +1,3 @@
-import { resolveKeys } from "./object-key-helpers";
 import { requireKeys } from "./require-keys";
 
 /**
@@ -38,5 +37,5 @@ export function assertKeys<T extends object>(
 	firstKeyOrKeys: keyof T | readonly (keyof T)[],
 	...restKeys: readonly (keyof T)[]
 ): void {
-	requireKeys(value, resolveKeys(firstKeyOrKeys, restKeys));
+	requireKeys(value, firstKeyOrKeys as keyof T, ...restKeys);
 }

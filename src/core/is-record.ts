@@ -1,5 +1,3 @@
-import { isPlainObjectLike } from "./object-key-helpers";
-
 /**
  * Checks whether a value is a record-like plain object.
  *
@@ -15,8 +13,4 @@ import { isPlainObjectLike } from "./object-key-helpers";
  * }
  * ```
  */
-export function isRecord(
-	value: unknown,
-): value is Record<PropertyKey, unknown> {
-	return isPlainObjectLike(value);
-}
+export { isPlainObject as isRecord } from "./is-plain-object";

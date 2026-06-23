@@ -29,7 +29,7 @@ describe("assertKeys", () => {
 				{ id: "1" } as { id?: string; role?: string },
 				["id", "role"] as const,
 			),
-		).toThrowError(new TypeError("Missing required keys: role"));
+		).toThrowError(new TypeError("M:role"));
 	});
 
 	it("rejects invalid literal keys at compile time", () => {
