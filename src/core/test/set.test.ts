@@ -53,4 +53,10 @@ describe("set", () => {
 		expect(result.items[1]).not.toBe(user.items[1]);
 		expect(result.items[1]?.name).toBe("updated");
 	});
+
+	it("returns the original object when the path is empty", () => {
+		const user = { profile: { name: "Umsizi" } };
+
+		expect(set(user, [], "ignored")).toBe(user);
+	});
 });

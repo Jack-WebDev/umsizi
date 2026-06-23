@@ -29,6 +29,12 @@ describe("requireKeys", () => {
 		).toThrow(new TypeError("Missing required key: role"));
 	});
 
+	it("uses the plural label when multiple keys are missing", () => {
+		expect(() =>
+			requireKeys({} as { id?: string; role?: string }, "id", "role"),
+		).toThrow(new TypeError("Missing required keys: id, role"));
+	});
+
 	it("throws the requested keys when the value is not a plain object", () => {
 		const value = [] as unknown as Array<unknown> & { id?: string };
 

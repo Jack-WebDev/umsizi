@@ -20,6 +20,10 @@ describe("path", () => {
 		]);
 	});
 
+	it("ignores empty quoted path segments", () => {
+		expect(path("settings[''].enabled")).toEqual(["settings", "enabled"]);
+	});
+
 	it("returns a shallow copy when given an array path", () => {
 		const input = ["profile", "name"] as const;
 		const result = path(input);

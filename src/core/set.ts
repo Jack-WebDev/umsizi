@@ -31,16 +31,10 @@ function setAtPath(
 	segments: readonly PathSegment[],
 	value: unknown,
 ): unknown {
-	if (segments.length === 0) {
-		return value;
-	}
-
-	const segment = segments[0];
-	const rest = segments.slice(1);
-
-	if (segment === undefined) {
-		return value;
-	}
+	const [segment, ...rest] = segments as readonly [
+		PathSegment,
+		...PathSegment[],
+	];
 
 	const clone = cloneContainer(current, segment) as Record<
 		PropertyKey,
@@ -68,5 +62,11 @@ export function set<T extends object>(
 	pathInput: PathInput,
 	value: unknown,
 ): T {
-	return setAtPath(object, toPath(pathInput), value) as T;
+	const segments = toPath(pathInput);
+
+	if (segments.length === 0) {
+		return object;
+	}
+
+	return setAtPath(object, segments, value) as T;
 }

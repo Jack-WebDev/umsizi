@@ -28,4 +28,14 @@ describe("hasPath", () => {
 
 		expect(hasPath(user, ["profile", "nickname"])).toBe(true);
 	});
+
+	it("supports function objects as path roots", () => {
+		const callable = Object.assign(() => "ok", {
+			meta: {
+				ready: true,
+			},
+		});
+
+		expect(hasPath(callable, ["meta", "ready"])).toBe(true);
+	});
 });

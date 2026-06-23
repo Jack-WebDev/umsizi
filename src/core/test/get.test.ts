@@ -43,6 +43,16 @@ describe("get", () => {
 		);
 	});
 
+	it("can read own properties from function objects", () => {
+		const callable = Object.assign(() => "ok", {
+			meta: {
+				label: "worker",
+			},
+		});
+
+		expect(get(callable, ["meta", "label"] as const)).toBe("worker");
+	});
+
 	it("preserves tuple-path inference", () => {
 		const user = {
 			profile: {
