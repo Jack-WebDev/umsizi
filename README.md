@@ -198,6 +198,68 @@ if (hasOwn(user, key)) {
 }
 ```
 
+#### `isPlainObject`
+
+```ts
+import { isPlainObject } from "umsizi";
+
+const payload: unknown = { id: "1" };
+
+if (isPlainObject(payload)) {
+	payload.id;
+}
+```
+
+#### `isRecord`
+
+```ts
+import { isRecord } from "umsizi";
+
+const payload: unknown = { id: "1" };
+
+if (isRecord(payload)) {
+	payload.id;
+}
+```
+
+#### `hasKeys`
+
+```ts
+import { hasKeys } from "umsizi";
+
+const user = { id: "1", role: "admin" } as const;
+
+if (hasKeys(user, "id", "role")) {
+	user.id;
+	user.role;
+}
+```
+
+#### `requireKeys`
+
+```ts
+import { requireKeys } from "umsizi";
+
+const user = { id: "1", role: "admin" } as const;
+const ensured = requireKeys(user, "id", "role");
+```
+
+#### `assertKeys`
+
+```ts
+import { assertKeys } from "umsizi";
+
+const user: { id?: string; role?: string } = {
+	id: "1",
+	role: "admin",
+};
+
+assertKeys(user, "id", "role");
+
+user.id;
+user.role;
+```
+
 #### `mapValues`
 
 ```ts
