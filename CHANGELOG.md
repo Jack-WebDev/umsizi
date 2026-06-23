@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.3.0
+
+### Minor Changes
+
+- 1899979: add utility functions for object manipulation and corresponding examples
+
 ## 0.2.2
 
 ### Patch Changes
