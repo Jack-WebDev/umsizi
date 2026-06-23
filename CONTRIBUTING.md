@@ -60,3 +60,9 @@ A pull request should include:
 - runtime test coverage
 - type-level test coverage
 - README updates when the public API changes
+
+## Releases
+
+- Versioning and release PRs are managed with Changesets.
+- npm publishing is handled by GitHub Actions through npm trusted publishing (OIDC), not an `NPM_TOKEN` repository secret.
+- Before relying on the release workflow, configure the `umsizi` package on npm to trust the `.github/workflows/release.yml` workflow in `Jack-WebDev/umsizi`.
