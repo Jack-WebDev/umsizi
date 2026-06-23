@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.5.0
+
+### Minor Changes
+
+- 1ca57ef: - Add DX-first object guard and key assertion helpers: `isPlainObject`, `isRecord`, `hasKeys`, `requireKeys`, and `assertKeys`.
+
 ## 0.4.0
 
 ### Minor Changes
