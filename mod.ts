@@ -1,17 +1,14 @@
 /**
- * TypeScript-first utility helpers for object operations, routing strings,
- * file path checks, and render-function guards.
+ * TypeScript-first, framework-agnostic object utility helpers.
  *
- * Import framework-agnostic helpers from the package root, or use the
- * dedicated `react`, `next`, and `node` entrypoints when you want narrower
- * subpath imports.
+ * Use the dedicated `react`, `next`, and `node` entrypoints for
+ * framework-specific helpers.
  *
  * @example
  * ```ts
- * import { identity, normalizePathname } from "@umsizi/umsizi";
+ * import { identity } from "@umsizi/umsizi";
  *
  * identity("umsizi"); // "umsizi"
- * normalizePathname("dashboard"); // "/dashboard"
  * ```
  *
  * @module
@@ -44,11 +41,3 @@ export { typedEntries } from "./src/core/typed-entries";
 export { typedFromEntries } from "./src/core/typed-from-entries";
 /** Returns the own enumerable string keys of an object. */
 export { typedKeys } from "./src/core/typed-keys";
-/** Normalizes a path-like string for routing and pathname comparisons. */
-export { normalizePathname } from "./src/next/normalize-pathname";
-
-/** Checks whether a file path ends with the given extension. */
-export { hasFileExtension } from "./src/node/has-file-extension";
-
-/** Type guard for values that are callable in render-oriented code paths. */
-export { isRenderFunction } from "./src/react/is-render-function";
