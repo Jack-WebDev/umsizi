@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.7.0
+
+### Minor Changes
+
+- 7be8ec1: Add new object utility helpers: `renameKeys`, `mapKeys`, `filterKeys`, `partitionObject`, and `invertObject`.
+
 ## 0.6.0
 
 ### Minor Changes
