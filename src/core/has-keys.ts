@@ -13,8 +13,13 @@
  */
 export function hasKeys<
 	T extends object,
-	const Keys extends readonly (keyof T)[],
->(value: T, ...keys: Keys): value is T & Required<Pick<T, Keys[number]>>;
+	const FirstKey extends keyof T,
+	const RestKeys extends readonly (keyof T)[],
+>(
+	value: T,
+	firstKey: FirstKey,
+	...restKeys: RestKeys
+): value is T & Required<Pick<T, FirstKey | RestKeys[number]>>;
 export function hasKeys<
 	T extends object,
 	const FirstKey extends keyof T,

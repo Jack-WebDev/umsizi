@@ -37,6 +37,8 @@ describe("assertKeys", () => {
 		const shouldRunTypeChecks = false as boolean;
 
 		if (shouldRunTypeChecks) {
+			// @ts-expect-error at least one key is required
+			assertKeys(value);
 			// @ts-expect-error invalid key
 			assertKeys(value, "missing");
 			// @ts-expect-error invalid key in tuple literal

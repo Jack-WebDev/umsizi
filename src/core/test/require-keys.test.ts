@@ -40,4 +40,16 @@ describe("requireKeys", () => {
 
 		expect(() => requireKeys(value, "id")).toThrowError(new TypeError("M:id"));
 	});
+
+	it("rejects zero rest keys at compile time", () => {
+		const value = { id: "1", role: "admin" } as const;
+		const shouldRunTypeChecks = false as boolean;
+
+		if (shouldRunTypeChecks) {
+			// @ts-expect-error at least one key is required
+			requireKeys(value);
+		}
+
+		expect(value).toEqual({ id: "1", role: "admin" });
+	});
 });

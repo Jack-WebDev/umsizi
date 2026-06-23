@@ -15,8 +15,13 @@ import { hasKeys } from "./has-keys";
  */
 export function requireKeys<
 	T extends object,
-	const Keys extends readonly (keyof T)[],
->(value: T, ...keys: Keys): T & Required<Pick<T, Keys[number]>>;
+	const FirstKey extends keyof T,
+	const RestKeys extends readonly (keyof T)[],
+>(
+	value: T,
+	firstKey: FirstKey,
+	...restKeys: RestKeys
+): T & Required<Pick<T, FirstKey | RestKeys[number]>>;
 export function requireKeys<
 	T extends object,
 	const FirstKey extends keyof T,

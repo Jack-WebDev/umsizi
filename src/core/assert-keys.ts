@@ -15,11 +15,13 @@ import { requireKeys } from "./require-keys";
  */
 export function assertKeys<
 	T extends object,
-	const Keys extends readonly (keyof T)[],
+	const FirstKey extends keyof T,
+	const RestKeys extends readonly (keyof T)[],
 >(
 	value: T,
-	...keys: Keys
-): asserts value is T & Required<Pick<T, Keys[number]>>;
+	firstKey: FirstKey,
+	...restKeys: RestKeys
+): asserts value is T & Required<Pick<T, FirstKey | RestKeys[number]>>;
 export function assertKeys<
 	T extends object,
 	const FirstKey extends keyof T,
