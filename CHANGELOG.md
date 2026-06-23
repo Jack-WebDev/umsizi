@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.6.0
+
+### Minor Changes
+
+- 0e2aee0: Add nested object path utilities to the core package: `get()`, `set()`, `path()`, and `hasPath()`.
+
 ## 0.5.0
 
 ### Minor Changes
