@@ -2,5 +2,14 @@
 	"name": "@umsizi/umsizi",
 	"version": "0.1.0",
 	"license": "MIT",
-	"exports": "./mod.ts"
+	"exports": {
+		".": "./mod.ts",
+		"./react": "./src/react/index.ts",
+		"./next": "./src/next/index.ts",
+		"./node": "./src/node/index.ts"
+	},
+	"publish": {
+		"include": ["LICENSE", "README.md", "mod.ts", "src/**/*.ts"],
+		"exclude": ["src/**/test/**"]
+	}
 }

@@ -25,6 +25,14 @@ pnpm run lint
 pnpm run check-types
 pnpm run test
 pnpm run build
+pnpm run check:package
+```
+
+Apply local autofixes when needed:
+
+```bash
+pnpm run lint:fix
+pnpm run format
 ```
 
 ## Utility Design Guidelines

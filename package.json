@@ -47,10 +47,17 @@
 	"module": "./dist/index.js",
 	"scripts": {
 		"build": "tsdown",
+		"ci": "pnpm run lint && pnpm run check-types && pnpm run test && pnpm run build && pnpm run check:package",
+		"check:package": "pnpm run check:package:npm && pnpm run check:package:jsr",
+		"check:package:jsr": "pnpm dlx jsr publish --dry-run --allow-dirty",
+		"check:package:npm": "HUSKY=0 npm_config_cache=/tmp/umsizi-npm-cache npm pack --dry-run --ignore-scripts",
 		"dev": "tsdown --watch",
 		"format": "biome format --write .",
-		"lint": "biome check --write .",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
 		"check-types": "tsc --noEmit",
+		"release:publish": "pnpm run build && pnpm exec changeset publish && pnpm dlx jsr publish --allow-dirty",
+		"release:version": "pnpm exec changeset version && node ./scripts/sync-release-version.mjs",
 		"test": "vitest run",
 		"prepare": "husky"
 	},
