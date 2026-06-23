@@ -114,6 +114,38 @@ export type InvertedObject<T extends Record<string, PropertyKey>> = {
 	[K in StringKeyOf<T> as T[K]]: K;
 };
 
+type Simplify<T> = { [K in keyof T]: T[K] } & {};
+
+type WithDefault<T, D> = undefined extends T ? Exclude<T, undefined> | D : T;
+
+type MergeDefaultValue<T, D> = T extends readonly unknown[]
+	? WithDefault<T, D>
+	: T extends object
+		? D extends object
+			? MergeDefaulted<T, D>
+			: WithDefault<T, D>
+		: WithDefault<T, D>;
+
+export type Defaulted<T extends object, D extends object> = Simplify<{
+	[K in keyof T | keyof D]: K extends keyof T
+		? K extends keyof D
+			? WithDefault<T[K], D[K]>
+			: T[K]
+		: K extends keyof D
+			? D[K]
+			: never;
+}>;
+
+export type MergeDefaulted<T extends object, D extends object> = Simplify<{
+	[K in keyof T | keyof D]: K extends keyof T
+		? K extends keyof D
+			? MergeDefaultValue<T[K], D[K]>
+			: T[K]
+		: K extends keyof D
+			? D[K]
+			: never;
+}>;
+
 type PathValueAtSegment<T, K extends PathSegment> = K extends keyof T
 	? T[K]
 	: K extends number

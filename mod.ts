@@ -20,6 +20,9 @@ export { assertKeys } from "./src/core/assert-keys";
 /** Creates a new object with all `null` and `undefined` values removed. */
 export { compactObject } from "./src/core/compact-object";
 
+/** Creates a new object by filling missing or `undefined` properties. */
+export { defaults } from "./src/core/defaults";
+
 /** Filters an object's own enumerable properties by key. */
 export { filterKeys } from "./src/core/filter-keys";
 
@@ -58,6 +61,8 @@ export { mapKeys } from "./src/core/map-keys";
 
 /** Maps an object's own enumerable values while preserving its string keys. */
 export { mapValues } from "./src/core/map-values";
+/** Recursively fills missing or `undefined` properties from defaults. */
+export { mergeDefaults } from "./src/core/merge-defaults";
 /** Creates a new object excluding the selected own enumerable properties. */
 export { omit } from "./src/core/omit";
 /** Partitions an object's own enumerable properties into two objects. */
@@ -78,3 +83,5 @@ export { typedEntries } from "./src/core/typed-entries";
 export { typedFromEntries } from "./src/core/typed-from-entries";
 /** Returns the own enumerable string keys of an object. */
 export { typedKeys } from "./src/core/typed-keys";
+/** Creates a reusable function that applies deep defaults. */
+export { withDefaults } from "./src/core/with-defaults";
