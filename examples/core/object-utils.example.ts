@@ -3,19 +3,25 @@ import {
 	compactObject,
 	filterValues,
 	get,
+	groupByKey,
 	hasKeys,
 	hasPath,
+	indexByKey,
 	isPlainObject,
 	isRecord,
 	mapValues,
+	matchByKey,
 	omit,
+	parseObject,
 	path,
 	pick,
 	requireKeys,
+	schema,
 	set,
 	typedEntries,
 	typedFromEntries,
 	typedKeys,
+	validateObject,
 } from "../../src";
 
 const record = {
@@ -75,9 +81,51 @@ console.log(
 );
 
 const payload: unknown = { id: "usr_1", role: "admin" };
+const userSchema = schema({
+	id: (value: unknown): value is string => typeof value === "string",
+	active: (value: unknown): value is boolean => typeof value === "boolean",
+});
 
 console.log("isPlainObject", isPlainObject(payload));
 console.log("isRecord", isRecord(payload));
+console.log(
+	"groupByKey",
+	groupByKey(
+		[
+			{ id: "usr_1", role: "admin" },
+			{ id: "usr_2", role: "member" },
+			{ id: "usr_3", role: "admin" },
+		],
+		"role",
+	),
+);
+console.log(
+	"indexByKey",
+	indexByKey(
+		[
+			{ id: "usr_1", name: "Umsizi" },
+			{ id: "usr_2", name: "Ada" },
+		],
+		"id",
+	),
+);
+console.log(
+	"matchByKey",
+	matchByKey(
+		[{ id: "usr_1", name: "Umsizi" }],
+		[{ userId: "usr_1", team: "core" }],
+		"id",
+		"userId",
+	),
+);
+console.log(
+	"validateObject",
+	validateObject({ id: "usr_1", active: true }, userSchema),
+);
+console.log(
+	"parseObject",
+	parseObject({ id: "usr_1", active: true }, userSchema),
+);
 
 if (isPlainObject(payload) && hasKeys(payload, "id", "role")) {
 	console.log("hasKeys", payload.id, payload.role);

@@ -114,6 +114,30 @@ export type InvertedObject<T extends Record<string, PropertyKey>> = {
 	[K in StringKeyOf<T> as T[K]]: K;
 };
 
+export type Validator<T> = (value: unknown) => value is T;
+
+export type ObjectSchema = Record<string, Validator<unknown>>;
+
+export type SchemaValue<T> = T extends Validator<infer U> ? U : never;
+
+export type InferSchema<T extends ObjectSchema> = {
+	[K in keyof T]: SchemaValue<T[K]>;
+};
+
+export type GroupedByKey<T extends object, K extends keyof T> = Partial<
+	Record<Extract<T[K], PropertyKey>, Array<T>>
+>;
+
+export type IndexedByKey<T extends object, K extends keyof T> = Partial<
+	Record<Extract<T[K], PropertyKey>, T>
+>;
+
+export type KeyMatch<K extends PropertyKey, L, R> = {
+	key: K;
+	left: L;
+	right: R;
+};
+
 type Simplify<T> = { [K in keyof T]: T[K] } & {};
 
 type WithDefault<T, D> = undefined extends T ? Exclude<T, undefined> | D : T;

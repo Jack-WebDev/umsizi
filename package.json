@@ -92,7 +92,7 @@
 		{
 			"name": "umsizi (core)",
 			"path": "dist/index.js",
-			"limit": "1.1 KB"
+			"limit": "1.25 KB"
 		},
 		{
 			"name": "umsizi/react",
