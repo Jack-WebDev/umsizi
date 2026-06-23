@@ -33,16 +33,16 @@ export type ValueGuard<T extends object, S extends T[StringKeyOf<T>]> = (
 ) => value is S;
 
 export type MappedValues<T extends object, R> = {
-	[K in keyof T]: R;
+	[K in StringKeyOf<T>]: R;
 };
 
 export type FilteredValues<
 	T extends object,
 	S extends T[StringKeyOf<T>],
 > = Partial<{
-	[K in keyof T]: Extract<T[K], S>;
+	[K in StringKeyOf<T>]: Extract<T[K], S>;
 }>;
 
 export type CompactedObject<T extends object> = Partial<{
-	[K in keyof T]: Exclude<T[K], null | undefined>;
+	[K in StringKeyOf<T>]: Exclude<T[K], null | undefined>;
 }>;

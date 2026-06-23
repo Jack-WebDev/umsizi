@@ -22,12 +22,12 @@ export function filterValues<
 export function filterValues<T extends object>(
 	object: T,
 	predicate: ValuePredicate<T>,
-): Partial<T>;
+): FilteredValues<T, T[Extract<keyof T, string>]>;
 export function filterValues<T extends object>(
 	object: T,
 	predicate: ValuePredicate<T>,
-): Partial<T> {
-	const result: Partial<T> = {};
+): FilteredValues<T, T[Extract<keyof T, string>]> {
+	const result = {} as FilteredValues<T, T[Extract<keyof T, string>]>;
 
 	for (const key of typedKeys(object)) {
 		const value = object[key];

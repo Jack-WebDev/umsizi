@@ -42,6 +42,14 @@ describe("mapValues", () => {
 		expectTypeOf(result.active).toEqualTypeOf<string>();
 	});
 
+	it("excludes symbol and numeric keys from the result type", () => {
+		const symbol = Symbol("secret");
+		const source = { visible: 1, 0: 2, [symbol]: 3 } as const;
+		const result = mapValues(source, (value) => String(value));
+
+		expectTypeOf(result).toEqualTypeOf<{ visible: string }>();
+	});
+
 	it("infers callback parameters from the source object", () => {
 		const source = { id: "1", active: true } as const;
 

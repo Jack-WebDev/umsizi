@@ -61,6 +61,14 @@ describe("filterValues", () => {
 		expectTypeOf(result.active).toEqualTypeOf<true | undefined>();
 	});
 
+	it("excludes symbol and numeric keys from the result type", () => {
+		const symbol = Symbol("secret");
+		const source = { visible: "ok", 0: 1, [symbol]: true } as const;
+		const result = filterValues(source, () => true);
+
+		expectTypeOf(result).toEqualTypeOf<Partial<{ visible: "ok" }>>();
+	});
+
 	it("infers callback parameters predictably", () => {
 		const source = { id: "1", active: true } as const;
 

@@ -3,7 +3,7 @@ import type { MappedValues, ValueMapper } from "./types";
 
 /**
  * Maps the values of an object's own enumerable string-keyed properties while
- * preserving the original key set.
+ * preserving the original enumerable string-key set.
  *
  * @example
  * ```ts

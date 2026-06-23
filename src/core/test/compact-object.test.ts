@@ -51,4 +51,12 @@ describe("compactObject", () => {
 			Partial<{ id: "1"; nickname: string; active: boolean }>
 		>();
 	});
+
+	it("excludes symbol and numeric keys from the result type", () => {
+		const symbol = Symbol("secret");
+		const source = { visible: "ok", 0: null, [symbol]: "hidden" } as const;
+		const result = compactObject(source);
+
+		expectTypeOf(result).toEqualTypeOf<Partial<{ visible: "ok" }>>();
+	});
 });
