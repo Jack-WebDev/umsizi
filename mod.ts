@@ -20,6 +20,9 @@ export { assertKeys } from "./src/core/assert-keys";
 /** Creates a new object with all `null` and `undefined` values removed. */
 export { compactObject } from "./src/core/compact-object";
 
+/** Filters an object's own enumerable properties by key. */
+export { filterKeys } from "./src/core/filter-keys";
+
 /** Filters an object's own enumerable properties by value. */
 export { filterValues } from "./src/core/filter-values";
 
@@ -38,6 +41,9 @@ export { hasPath } from "./src/core/has-path";
 /** Returns the given value unchanged. */
 export { identity } from "./src/core/identity";
 
+/** Inverts an object's own enumerable string-keyed properties. */
+export { invertObject } from "./src/core/invert-object";
+
 /** Returns `true` when an object has no own enumerable properties. */
 export { isEmpty } from "./src/core/is-empty";
 
@@ -47,14 +53,21 @@ export { isPlainObject } from "./src/core/is-plain-object";
 /** Checks whether a value is a record-like plain object. */
 export { isRecord } from "./src/core/is-record";
 
+/** Maps an object's own enumerable keys to new string keys. */
+export { mapKeys } from "./src/core/map-keys";
+
 /** Maps an object's own enumerable values while preserving its string keys. */
 export { mapValues } from "./src/core/map-values";
 /** Creates a new object excluding the selected own enumerable properties. */
 export { omit } from "./src/core/omit";
+/** Partitions an object's own enumerable properties into two objects. */
+export { partitionObject } from "./src/core/partition-object";
 /** Converts dot/bracket notation into a normalized object path array. */
 export { path } from "./src/core/path";
 /** Creates a new object containing only the selected own properties. */
 export { pick } from "./src/core/pick";
+/** Renames selected own enumerable string-keyed properties. */
+export { renameKeys } from "./src/core/rename-keys";
 /** Requires that a plain object has the given own keys. */
 export { requireKeys } from "./src/core/require-keys";
 /** Returns a new object with the nested path set to the given value. */
