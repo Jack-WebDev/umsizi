@@ -6,26 +6,31 @@
  * - Strips a trailing slash (except for the root path).
  * - An empty string normalizes to `"/"`.
  *
- * Query strings and fragments are treated as opaque path characters and are
- * not parsed or stripped — pass only the pathname segment of a URL.
+ * A query string or fragment, if present, is left untouched — only the
+ * pathname segment preceding the first `?` or `#` is normalized.
  *
  * @example
  * ```ts
  * normalizePathname("dashboard"); // "/dashboard"
  * normalizePathname("//dashboard///settings/"); // "/dashboard/settings"
  * normalizePathname(""); // "/"
+ * normalizePathname("dashboard?redirect=//evil.com"); // "/dashboard?redirect=//evil.com"
  * ```
  */
 export function normalizePathname(pathname: string): string {
-	if (pathname === "") {
-		return "/";
+	const suffixIndex = pathname.search(/[?#]/);
+	const path = suffixIndex === -1 ? pathname : pathname.slice(0, suffixIndex);
+	const suffix = suffixIndex === -1 ? "" : pathname.slice(suffixIndex);
+
+	if (path === "") {
+		return `/${suffix}`;
 	}
 
-	const normalized = pathname.replace(/\/{2,}/g, "/").replace(/\/$/, "");
+	const normalized = path.replace(/\/{2,}/g, "/").replace(/\/$/, "");
 
 	if (normalized === "") {
-		return "/";
+		return `/${suffix}`;
 	}
 
-	return normalized.startsWith("/") ? normalized : `/${normalized}`;
+	return (normalized.startsWith("/") ? normalized : `/${normalized}`) + suffix;
 }

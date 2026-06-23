@@ -26,19 +26,29 @@ describe("requireKeys", () => {
 	it("throws a type error with the missing key list", () => {
 		expect(() =>
 			requireKeys({ id: "1" } as { id?: string; role?: string }, "id", "role"),
-		).toThrowError(new TypeError("M:role"));
+		).toThrow(new TypeError("Missing required key: role"));
+	});
+
+	it("uses the plural label when multiple keys are missing", () => {
+		expect(() =>
+			requireKeys({} as { id?: string; role?: string }, "id", "role"),
+		).toThrow(new TypeError("Missing required keys: id, role"));
 	});
 
 	it("throws the requested keys when the value is not a plain object", () => {
 		const value = [] as unknown as Array<unknown> & { id?: string };
 
-		expect(() => requireKeys(value, "id")).toThrowError(new TypeError("M:id"));
+		expect(() => requireKeys(value, "id")).toThrow(
+			new TypeError("Missing required key: id"),
+		);
 	});
 
 	it("throws the requested keys when the value is not an object", () => {
 		const value = "umsizi" as never as { id?: string };
 
-		expect(() => requireKeys(value, "id")).toThrowError(new TypeError("M:id"));
+		expect(() => requireKeys(value, "id")).toThrow(
+			new TypeError("Missing required key: id"),
+		);
 	});
 
 	it("rejects zero rest keys at compile time", () => {

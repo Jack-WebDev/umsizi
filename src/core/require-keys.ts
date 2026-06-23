@@ -65,5 +65,9 @@ export function requireKeys<T extends object>(
 		missingKeys.push(...keys);
 	}
 
-	throw new TypeError(`M:${missingKeys.map(String).join()}`);
+	const label = missingKeys.length === 1 ? "key" : "keys";
+
+	throw new TypeError(
+		`Missing required ${label}: ${missingKeys.map(String).join(", ")}`,
+	);
 }
