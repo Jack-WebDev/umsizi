@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.8.0
+
+### Minor Changes
+
+- 005030f: Add three new object utilities
+
 ## 0.7.0
 
 ### Minor Changes
