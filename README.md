@@ -1,5 +1,9 @@
 # Umsizi
 
+[![npm version](https://img.shields.io/npm/v/umsizi.svg)](https://www.npmjs.com/package/umsizi)
+[![CI](https://github.com/Jack-WebDev/umsizi/actions/workflows/ci.yml/badge.svg)](https://github.com/Jack-WebDev/umsizi/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 > The missing TypeScript standard library.
 
 **Umsizi** (pronounced *oom-see-zee*) is a modern, zero-dependency utility library built from the ground up for TypeScript applications. The name comes from the Zulu word for **"helper"** or **"assistant"**—which is exactly what this library is designed to be.
@@ -163,6 +167,36 @@ hasFileExtension("package.json", "json");
 
 ---
 
+## Compatibility
+
+- **ESM-only.** Umsizi ships only as ECMAScript modules (no CommonJS build). `require("umsizi")` will not work; use `import`. If your project is on CommonJS, you'll need a dynamic `import()` or a bundler that handles ESM dependencies.
+- **Node.js 20+.** Enforced via `engines.node` in `package.json`.
+- **Browsers:** the code targets ES2022 and has no Node-specific APIs in `umsizi` (core), `umsizi/react`, and `umsizi/next`; `umsizi/node` is Node-only by design. Bundle through your usual toolchain (Vite, Webpack, etc.) — there's no separate browser build.
+
+## Error Handling Philosophy
+
+Umsizi utilities **trust their inputs** to match their TypeScript signatures. They do not perform runtime validation, and they do not throw — invalid input (e.g. calling a Node-typed function with a non-string) produces an unspecified but non-throwing result rather than an exception.
+
+If you're handling untrusted input (user input, network responses, `unknown`/`any` values), validate or narrow it *before* passing it into Umsizi. This keeps the utilities small, predictable, and fast, matching their role as thin building blocks rather than a validation layer.
+
+## Versioning & Stability
+
+Umsizi follows [semantic versioning](https://semver.org/). While the package is `0.x`:
+
+- Minor versions (`0.x.0`) may include breaking changes to the public API.
+- Patch versions (`0.0.x`) are bug fixes only.
+- Once the API stabilizes, `1.0.0` will commit to standard semver guarantees (breaking changes only on major versions).
+
+Releases are managed via [Changesets](https://github.com/changesets/changesets); see the generated `CHANGELOG.md` (created on first release) for version history.
+
+---
+
+## Examples
+
+See [`examples/`](./examples) for runnable, slightly more realistic usage of each utility beyond the snippets below.
+
+---
+
 ## Current Status
 
 Umsizi is still in early development. The package structure is in place, the initial utilities are implemented, and the public API is intentionally small.
@@ -194,6 +228,12 @@ If you want to introduce a helper, ensure it meets the baseline:
 2. It features bulletproof TypeScript type safety.
 3. It includes comprehensive runtime and type-level tests.
 4. It remains entirely dependency-free.
+
+---
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for the vulnerability reporting policy.
 
 ---
 

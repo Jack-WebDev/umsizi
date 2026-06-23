@@ -47,7 +47,7 @@
 	"module": "./dist/index.js",
 	"scripts": {
 		"build": "tsdown",
-		"ci": "pnpm run lint && pnpm run check-types && pnpm run test && pnpm run build && pnpm run check:package",
+		"ci": "pnpm run lint && pnpm run check-types && pnpm run test:coverage && pnpm run build && pnpm exec size-limit && pnpm run check:package",
 		"check:package": "pnpm run check:package:npm && pnpm run check:package:jsr",
 		"check:package:jsr": "pnpm dlx jsr publish --dry-run --allow-dirty",
 		"check:package:npm": "HUSKY=0 npm_config_cache=/tmp/umsizi-npm-cache npm pack --dry-run --ignore-scripts",
@@ -59,16 +59,21 @@
 		"release:publish": "pnpm run build && pnpm exec changeset publish && pnpm dlx jsr publish --allow-dirty",
 		"release:version": "pnpm exec changeset version && node ./scripts/sync-release-version.mjs",
 		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
+		"size": "pnpm run build && size-limit",
 		"prepare": "husky"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.5.1",
+		"@changesets/cli": "2.31.0",
+		"@size-limit/preset-small-lib": "12.1.0",
+		"@vitest/coverage-v8": "4.1.9",
 		"husky": "^9.1.7",
+		"lint-staged": "^16.1.2",
+		"size-limit": "12.1.0",
 		"tsdown": "^0.16.8",
 		"typescript": "5.9.2",
-		"vitest": "4.1.9",
-		"lint-staged": "^16.1.2",
-		"@changesets/cli": "2.31.0"
+		"vitest": "4.1.9"
 	},
 	"packageManager": "pnpm@10.32.1",
 	"publishConfig": {
@@ -81,5 +86,27 @@
 	},
 	"engines": {
 		"node": ">=20"
-	}
+	},
+	"size-limit": [
+		{
+			"name": "umsizi (core)",
+			"path": "dist/index.js",
+			"limit": "512 B"
+		},
+		{
+			"name": "umsizi/react",
+			"path": "dist/react.js",
+			"limit": "512 B"
+		},
+		{
+			"name": "umsizi/next",
+			"path": "dist/next.js",
+			"limit": "512 B"
+		},
+		{
+			"name": "umsizi/node",
+			"path": "dist/node.js",
+			"limit": "512 B"
+		}
+	]
 }

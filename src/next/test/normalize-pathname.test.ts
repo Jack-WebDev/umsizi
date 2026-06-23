@@ -16,4 +16,32 @@ describe("normalizePathname", () => {
 	it("preserves the root pathname", () => {
 		expect(normalizePathname("/")).toBe("/");
 	});
+
+	it("normalizes an empty string to the root pathname", () => {
+		expect(normalizePathname("")).toBe("/");
+	});
+
+	it("strips a trailing slash on non-root paths", () => {
+		expect(normalizePathname("/dashboard/")).toBe("/dashboard");
+	});
+
+	it("collapses a path of only slashes to the root pathname", () => {
+		expect(normalizePathname("///")).toBe("/");
+	});
+
+	it("does not parse or strip query strings", () => {
+		expect(normalizePathname("dashboard?tab=billing")).toBe(
+			"/dashboard?tab=billing",
+		);
+	});
+
+	it("does not parse or strip fragments", () => {
+		expect(normalizePathname("dashboard#section")).toBe("/dashboard#section");
+	});
+
+	it("preserves a single nested segment without duplicate slashes", () => {
+		expect(normalizePathname("/dashboard/settings")).toBe(
+			"/dashboard/settings",
+		);
+	});
 });

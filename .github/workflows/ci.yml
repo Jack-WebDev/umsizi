@@ -40,11 +40,14 @@ jobs:
       - name: Typecheck
         run: pnpm run check-types
 
-      - name: Test
-        run: pnpm run test
+      - name: Test with coverage
+        run: pnpm run test:coverage
 
       - name: Build
         run: pnpm run build
+
+      - name: Check bundle size
+        run: pnpm exec size-limit
 
       - name: Validate npm package contents
         run: pnpm run check:package:npm

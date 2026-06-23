@@ -13,6 +13,24 @@ describe("identity", () => {
 		expect(identity(value)).toBe(value);
 	});
 
+	it("returns the same array reference", () => {
+		const value = [1, 2, 3];
+
+		expect(identity(value)).toBe(value);
+	});
+
+	it("handles falsy values without coercion", () => {
+		expect(identity(0)).toBe(0);
+		expect(identity(false)).toBe(false);
+		expect(identity("")).toBe("");
+		expect(identity(null)).toBe(null);
+		expect(identity(undefined)).toBe(undefined);
+	});
+
+	it("handles NaN", () => {
+		expect(identity(Number.NaN)).toBe(Number.NaN);
+	});
+
 	it("preserves the input type", () => {
 		const value = { name: "umsizi", nested: { stable: true } } as const;
 		const result = identity(value);

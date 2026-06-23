@@ -42,6 +42,15 @@ pnpm run format
 - Keep names literal and standard-library-like.
 - Do not add options objects unless they remove real API ambiguity.
 - Reject helpers that are only thin aliases for existing JavaScript syntax.
+- Trust the TypeScript signature; do not add runtime validation or `throw` for
+  inputs that already violate the declared types. See [README § Error Handling
+  Philosophy](./README.md#error-handling-philosophy). If a new utility
+  genuinely needs to validate untrusted input (not just type-violating input),
+  call that out explicitly in the PR description so it can be reviewed as an
+  exception.
+- Add a JSDoc block with at least one `@example` for every exported function.
+- New utilities require both a test file and a JSDoc block before merge —
+  treat these as part of "the implementation," not optional follow-up.
 
 ## Pull Requests
 
