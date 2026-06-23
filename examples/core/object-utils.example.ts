@@ -15,6 +15,7 @@ const record = {
 	role: "admin",
 	loginCount: 0,
 	lastSeenAt: null,
+	createdAt: new Date(),
 	active: true,
 } as const;
 
@@ -27,8 +28,9 @@ console.log(
 		["active", true],
 	] as const),
 );
-console.log("pick", pick(record, ["id", "role"] as const));
+console.log("pick", pick(record, "id", "role"));
 console.log("omit", omit(record, "lastSeenAt"));
+console.log("omit (tuple)", omit(record, ["createdAt"] as const));
 console.log(
 	"mapValues",
 	mapValues(record, (value) => String(value)),

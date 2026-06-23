@@ -41,4 +41,16 @@ describe("mapValues", () => {
 		expectTypeOf(result.id).toEqualTypeOf<string>();
 		expectTypeOf(result.active).toEqualTypeOf<string>();
 	});
+
+	it("infers callback parameters from the source object", () => {
+		const source = { id: "1", active: true } as const;
+
+		mapValues(source, (value, key, object) => {
+			expectTypeOf(value).toEqualTypeOf<"1" | true>();
+			expectTypeOf(key).toEqualTypeOf<"id" | "active">();
+			expectTypeOf(object).toEqualTypeOf<typeof source>();
+
+			return String(value);
+		});
+	});
 });

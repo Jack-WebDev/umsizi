@@ -38,4 +38,25 @@ describe("pick", () => {
 		expectTypeOf(result.id).toEqualTypeOf<"1">();
 		expectTypeOf(result.active).toEqualTypeOf<true>();
 	});
+
+	it("falls back to a partial object type for widened key arrays", () => {
+		const user = { id: "1", name: "umsizi", active: true } as const;
+		const keys: Array<keyof typeof user> = ["id", "active"];
+		const result = pick(user, keys);
+
+		expectTypeOf(result.id).toEqualTypeOf<"1" | undefined>();
+		expectTypeOf(result.name).toEqualTypeOf<"umsizi" | undefined>();
+		expectTypeOf(result.active).toEqualTypeOf<true | undefined>();
+	});
+
+	it("rejects invalid literal keys at compile time", () => {
+		const user = { id: "1", name: "umsizi" } as const;
+
+		// @ts-expect-error invalid key
+		pick(user, "missing");
+		// @ts-expect-error invalid key in tuple literal
+		pick(user, ["id", "missing"] as const);
+
+		expect(user).toEqual({ id: "1", name: "umsizi" });
+	});
 });

@@ -1,4 +1,5 @@
 import { typedKeys } from "./typed-keys";
+import type { FilteredValues, ValueGuard, ValuePredicate } from "./types";
 
 /**
  * Filters an object's own enumerable string-keyed properties by value.
@@ -14,30 +15,18 @@ import { typedKeys } from "./typed-keys";
  * // { retries: 3, label: "" }
  * ```
  */
-export function filterValues<T extends object, S extends T[keyof T]>(
-	object: T,
-	predicate: (
-		value: T[Extract<keyof T, string>],
-		key: Extract<keyof T, string>,
-		object: T,
-	) => value is Extract<S, T[Extract<keyof T, string>]>,
-): Partial<{ [K in keyof T]: Extract<T[K], S> }>;
+export function filterValues<
+	T extends object,
+	S extends T[Extract<keyof T, string>],
+>(object: T, predicate: ValueGuard<T, S>): FilteredValues<T, S>;
 export function filterValues<T extends object>(
 	object: T,
-	predicate: (
-		value: T[Extract<keyof T, string>],
-		key: Extract<keyof T, string>,
-		object: T,
-	) => boolean,
+	predicate: ValuePredicate<T>,
 ): Partial<T>;
-export function filterValues<T extends object, S extends T[keyof T]>(
+export function filterValues<T extends object>(
 	object: T,
-	predicate: (
-		value: T[Extract<keyof T, string>],
-		key: Extract<keyof T, string>,
-		object: T,
-	) => boolean,
-): Partial<T> | Partial<{ [K in keyof T]: Extract<T[K], S> }> {
+	predicate: ValuePredicate<T>,
+): Partial<T> {
 	const result: Partial<T> = {};
 
 	for (const key of typedKeys(object)) {

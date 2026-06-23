@@ -34,7 +34,16 @@ describe("typedEntries", () => {
 		const entries = typedEntries(value);
 
 		expectTypeOf(entries).toEqualTypeOf<
-			Array<["id", "1"] | ["active", true]>
+			Array<readonly ["id", "1"] | readonly ["active", true]>
+		>();
+	});
+
+	it("preserves sensible destructuring inference", () => {
+		const value = { id: "1", active: true } as const;
+		const [entry] = typedEntries(value);
+
+		expectTypeOf(entry).toEqualTypeOf<
+			readonly ["id", "1"] | readonly ["active", true] | undefined
 		>();
 	});
 });

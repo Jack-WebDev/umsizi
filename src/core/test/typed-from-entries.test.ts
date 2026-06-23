@@ -37,4 +37,15 @@ describe("typedFromEntries", () => {
 
 		expectTypeOf(value).toEqualTypeOf<{ id: "1"; active: true }>();
 	});
+
+	it("preserves symbol and number access types", () => {
+		const symbol = Symbol("token");
+		const value = typedFromEntries([
+			[0, "zero"],
+			[symbol, true],
+		] as const);
+
+		expectTypeOf(value[0]).toEqualTypeOf<"zero">();
+		expectTypeOf(value[symbol]).toEqualTypeOf<true>();
+	});
 });

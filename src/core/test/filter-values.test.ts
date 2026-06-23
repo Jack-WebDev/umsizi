@@ -60,4 +60,16 @@ describe("filterValues", () => {
 		expectTypeOf(result.id).toEqualTypeOf<"1" | undefined>();
 		expectTypeOf(result.active).toEqualTypeOf<true | undefined>();
 	});
+
+	it("infers callback parameters predictably", () => {
+		const source = { id: "1", active: true } as const;
+
+		filterValues(source, (value, key, object) => {
+			expectTypeOf(value).toEqualTypeOf<"1" | true>();
+			expectTypeOf(key).toEqualTypeOf<"id" | "active">();
+			expectTypeOf(object).toEqualTypeOf<typeof source>();
+
+			return true;
+		});
+	});
 });

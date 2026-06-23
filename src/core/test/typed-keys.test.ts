@@ -31,4 +31,12 @@ describe("typedKeys", () => {
 
 		expectTypeOf(keys).toEqualTypeOf<Array<"id" | "name">>();
 	});
+
+	it("returns keys that can be used for indexed access without casts", () => {
+		const value = { id: "1", active: true } as const;
+
+		for (const key of typedKeys(value)) {
+			expectTypeOf(value[key]).toEqualTypeOf<"1" | true>();
+		}
+	});
 });

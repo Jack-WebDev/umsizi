@@ -1,4 +1,5 @@
 import { typedKeys } from "./typed-keys";
+import type { CompactedObject } from "./types";
 
 /**
  * Creates a new object with all `null` and `undefined` values removed.
@@ -12,12 +13,8 @@ import { typedKeys } from "./typed-keys";
  * compactObject(user); // { id: "1", active: false }
  * ```
  */
-export function compactObject<T extends object>(
-	object: T,
-): Partial<{ [K in keyof T]: Exclude<T[K], null | undefined> }> {
-	const result = {} as Partial<{
-		[K in keyof T]: Exclude<T[K], null | undefined>;
-	}>;
+export function compactObject<T extends object>(object: T): CompactedObject<T> {
+	const result = {} as CompactedObject<T>;
 
 	for (const key of typedKeys(object)) {
 		const value = object[key];

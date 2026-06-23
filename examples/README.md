@@ -4,6 +4,9 @@ Runnable, slightly more realistic usage examples for each Umsizi entry point. Th
 README's API reference shows the bare function signatures; these show them in a
 small bit of surrounding context.
 
+Examples are included in the repository TypeScript project, so they also act as
+editor and inference regression coverage during local typechecking.
+
 Each example imports directly from `../../src` so it can be run against the
 current checkout without building or publishing first:
 
