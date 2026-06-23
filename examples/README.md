@@ -9,6 +9,7 @@ current checkout without building or publishing first:
 
 ```bash
 pnpm dlx tsx examples/core/identity.example.ts
+pnpm dlx tsx examples/core/object-utils.example.ts
 pnpm dlx tsx examples/react/is-render-function.example.ts
 pnpm dlx tsx examples/next/normalize-pathname.example.ts
 pnpm dlx tsx examples/node/has-file-extension.example.ts

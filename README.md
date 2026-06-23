@@ -117,6 +117,106 @@ const value = identity("umsizi");
 
 ```
 
+#### `typedKeys`
+
+```ts
+import { typedKeys } from "umsizi";
+
+const user = { id: "1", name: "Jack" } as const;
+
+typedKeys(user);
+// ["id", "name"]
+```
+
+#### `typedEntries`
+
+```ts
+import { typedEntries } from "umsizi";
+
+const user = { id: "1", active: true } as const;
+
+typedEntries(user);
+// [["id", "1"], ["active", true]]
+```
+
+#### `typedFromEntries`
+
+```ts
+import { typedFromEntries } from "umsizi";
+
+const user = typedFromEntries([
+	["id", "1"],
+	["active", true],
+] as const);
+```
+
+#### `pick`
+
+```ts
+import { pick } from "umsizi";
+
+pick({ id: "1", name: "Jack", role: "admin" }, ["id", "role"]);
+// { id: "1", role: "admin" }
+```
+
+#### `omit`
+
+```ts
+import { omit } from "umsizi";
+
+omit({ id: "1", name: "Jack", role: "admin" }, "role");
+// { id: "1", name: "Jack" }
+```
+
+#### `isEmpty`
+
+```ts
+import { isEmpty } from "umsizi";
+
+isEmpty({});
+// true
+```
+
+#### `hasOwn`
+
+```ts
+import { hasOwn } from "umsizi";
+
+const user = { id: "1" };
+const key: string = "id";
+
+if (hasOwn(user, key)) {
+	user[key];
+}
+```
+
+#### `mapValues`
+
+```ts
+import { mapValues } from "umsizi";
+
+mapValues({ draft: 1, published: 2 }, (value) => value * 2);
+// { draft: 2, published: 4 }
+```
+
+#### `filterValues`
+
+```ts
+import { filterValues } from "umsizi";
+
+filterValues({ a: 1, b: 0, c: null }, (value) => value !== null);
+// { a: 1, b: 0 }
+```
+
+#### `compactObject`
+
+```ts
+import { compactObject } from "umsizi";
+
+compactObject({ id: "1", nickname: null, active: false });
+// { id: "1", active: false }
+```
+
 ### React Utilities (`umsizi/react`)
 
 #### `isRenderFunction`
