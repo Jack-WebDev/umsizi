@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.9.0
+
+### Minor Changes
+
+- 4914aae: Add new core utilities for object validation/parsing and key-based collection transforms.
+
 ## 0.8.0
 
 ### Minor Changes
