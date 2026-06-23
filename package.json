@@ -1,0 +1,71 @@
+{
+	"name": "umsizi",
+	"version": "0.1.0",
+	"description": "A zero-dependency TypeScript utility library.",
+	"license": "MIT",
+	"author": "Jack-WebDev",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Jack-WebDev/umsizi.git"
+	},
+	"homepage": "https://github.com/Jack-WebDev/umsizi#readme",
+	"bugs": {
+		"url": "https://github.com/Jack-WebDev/umsizi/issues"
+	},
+	"keywords": [
+		"typescript",
+		"utilities",
+		"helpers",
+		"toolkit",
+		"zero-dependency"
+	],
+	"files": [
+		"dist"
+	],
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./react": {
+			"types": "./dist/react.d.ts",
+			"import": "./dist/react.js"
+		},
+		"./next": {
+			"types": "./dist/next.d.ts",
+			"import": "./dist/next.js"
+		},
+		"./node": {
+			"types": "./dist/node.d.ts",
+			"import": "./dist/node.js"
+		}
+	},
+	"types": "./dist/index.d.ts",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"scripts": {
+		"build": "tsdown",
+		"dev": "tsdown --watch",
+		"format": "biome format --write .",
+		"lint": "biome check --write .",
+		"check-types": "tsc --noEmit",
+		"test": "vitest run",
+		"prepare": "husky"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.1",
+		"typescript": "5.9.2",
+		"vitest": "4.1.9",
+		"husky": "^9.1.7",
+		"tsdown": "^0.16.8"
+	},
+	"packageManager": "pnpm@10.32.1",
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=20"
+	}
+}
