@@ -26,6 +26,24 @@ export type ValueMapper<T extends object, R> = (
 	object: T,
 ) => R;
 
+export type KeyMapper<T extends object, R extends string> = (
+	key: StringKeyOf<T>,
+	value: T[StringKeyOf<T>],
+	object: T,
+) => R;
+
+export type KeyPredicate<T extends object> = (
+	key: StringKeyOf<T>,
+	value: T[StringKeyOf<T>],
+	object: T,
+) => boolean;
+
+export type KeyGuard<T extends object, S extends StringKeyOf<T>> = (
+	key: StringKeyOf<T>,
+	value: T[StringKeyOf<T>],
+	object: T,
+) => key is S;
+
 export type ValuePredicate<T extends object> = (
 	value: T[StringKeyOf<T>],
 	key: StringKeyOf<T>,
@@ -42,6 +60,22 @@ export type MappedValues<T extends object, R> = {
 	[K in StringKeyOf<T>]: R;
 };
 
+export type MappedKeys<T extends object, R extends string> = Record<
+	R,
+	T[StringKeyOf<T>]
+>;
+
+export type RenamedKeys<
+	T extends object,
+	M extends Partial<Record<StringKeyOf<T>, string>>,
+> = {
+	[K in StringKeyOf<T> as K extends keyof M
+		? M[K] extends string
+			? M[K]
+			: K
+		: K]: T[K];
+};
+
 export type FilteredValues<
 	T extends object,
 	S extends T[StringKeyOf<T>],
@@ -49,9 +83,36 @@ export type FilteredValues<
 	[K in StringKeyOf<T>]: Extract<T[K], S>;
 }>;
 
+export type FilteredKeys<T extends object, S extends StringKeyOf<T>> = Partial<
+	Pick<T, S>
+>;
+
+export type PartitionedValues<
+	T extends object,
+	S extends T[StringKeyOf<T>],
+> = readonly [
+	FilteredValues<T, S>,
+	Partial<{
+		[K in StringKeyOf<T>]: Exclude<T[K], S>;
+	}>,
+];
+
+export type PartitionedObject<T extends object> = readonly [
+	Partial<{
+		[K in StringKeyOf<T>]: T[K];
+	}>,
+	Partial<{
+		[K in StringKeyOf<T>]: T[K];
+	}>,
+];
+
 export type CompactedObject<T extends object> = Partial<{
 	[K in StringKeyOf<T>]: Exclude<T[K], null | undefined>;
 }>;
+
+export type InvertedObject<T extends Record<string, PropertyKey>> = {
+	[K in StringKeyOf<T> as T[K]]: K;
+};
 
 type PathValueAtSegment<T, K extends PathSegment> = K extends keyof T
 	? T[K]
