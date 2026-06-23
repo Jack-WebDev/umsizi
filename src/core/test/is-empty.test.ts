@@ -30,4 +30,16 @@ describe("isEmpty", () => {
 
 		expect(isEmpty(value)).toBe(true);
 	});
+
+	it("ignores non-enumerable symbol properties", () => {
+		const symbol = Symbol("hidden");
+		const value = {};
+
+		Object.defineProperty(value, symbol, {
+			value: true,
+			enumerable: false,
+		});
+
+		expect(isEmpty(value)).toBe(true);
+	});
 });
