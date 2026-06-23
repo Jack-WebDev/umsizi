@@ -1,9 +1,14 @@
 import {
+	assertKeys,
 	compactObject,
 	filterValues,
+	hasKeys,
+	isPlainObject,
+	isRecord,
 	mapValues,
 	omit,
 	pick,
+	requireKeys,
 	typedEntries,
 	typedFromEntries,
 	typedKeys,
@@ -40,3 +45,16 @@ console.log(
 	filterValues(record, (value) => typeof value === "string"),
 );
 console.log("compactObject", compactObject(record));
+
+const payload: unknown = { id: "usr_1", role: "admin" };
+
+console.log("isPlainObject", isPlainObject(payload));
+console.log("isRecord", isRecord(payload));
+
+if (isPlainObject(payload) && hasKeys(payload, "id", "role")) {
+	console.log("hasKeys", payload.id, payload.role);
+}
+
+const ensured = requireKeys(record, "id", "role");
+assertKeys(ensured, ["id", "role"] as const);
+console.log("required keys", ensured.id, ensured.role);
