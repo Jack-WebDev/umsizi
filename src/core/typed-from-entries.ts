@@ -1,3 +1,5 @@
+import type { EntryTuples, ObjectFromEntries } from "./types";
+
 /**
  * Creates an object from entries while preserving the key and value types from
  * the input tuple array.
@@ -14,8 +16,8 @@
  * // inferred as: { id: "1"; active: true }
  * ```
  */
-export function typedFromEntries<
-	const T extends ReadonlyArray<readonly [PropertyKey, unknown]>,
->(entries: T): { [K in T[number] as K[0]]: K[1] } {
-	return Object.fromEntries(entries) as { [K in T[number] as K[0]]: K[1] };
+export function typedFromEntries<const T extends EntryTuples>(
+	entries: T,
+): ObjectFromEntries<T> {
+	return Object.fromEntries(entries) as ObjectFromEntries<T>;
 }

@@ -1,3 +1,5 @@
+import type { StringKeyOf } from "./types";
+
 /**
  * Returns the own enumerable string keys of an object with preserved key types.
  *
@@ -10,8 +12,6 @@
  * typedKeys(user); // ["id", "name"]
  * ```
  */
-export function typedKeys<T extends object>(
-	object: T,
-): Array<Extract<keyof T, string>> {
-	return Object.keys(object) as Array<Extract<keyof T, string>>;
+export function typedKeys<T extends object>(object: T): Array<StringKeyOf<T>> {
+	return Object.keys(object) as Array<StringKeyOf<T>>;
 }

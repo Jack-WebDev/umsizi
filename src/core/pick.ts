@@ -3,36 +3,43 @@ import { hasOwn } from "./has-own";
 /**
  * Creates a new object containing only the selected own properties.
  *
- * Supports either a readonly array of keys or rest keys.
+ * Prefer the rest-key form for the strongest autocomplete and inference.
  *
  * @example
  * ```ts
  * const user = { id: "1", name: "Umsizi", role: "admin" } as const;
  *
- * pick(user, ["id", "role"]); // { id: "1", role: "admin" }
  * pick(user, "name"); // { name: "Umsizi" }
+ * pick(user, ["id", "role"] as const); // { id: "1", role: "admin" }
  * ```
  */
-export function pick<T extends object, const K extends keyof T>(
+export function pick<T extends object, const Keys extends readonly (keyof T)[]>(
 	object: T,
-	keys: readonly K[],
-): Pick<T, K>;
-export function pick<T extends object, const K extends keyof T>(
+	...keys: Keys
+): Pick<T, Keys[number]>;
+export function pick<
+	T extends object,
+	const FirstKey extends keyof T,
+	const RestKeys extends readonly (keyof T)[],
+>(
 	object: T,
-	firstKey: K,
-	...restKeys: readonly K[]
-): Pick<T, K>;
-export function pick<T extends object, const K extends keyof T>(
+	keys: readonly [FirstKey, ...RestKeys],
+): Pick<T, FirstKey | RestKeys[number]>;
+export function pick<T extends object>(
 	object: T,
-	keysOrFirstKey: readonly K[] | K,
-	...restKeys: readonly K[]
-): Pick<T, K> {
+	keys: readonly (keyof T)[],
+): Partial<T>;
+export function pick<T extends object>(
+	object: T,
+	firstKeyOrKeys: keyof T | readonly (keyof T)[],
+	...restKeys: readonly (keyof T)[]
+): Partial<T> {
 	const keys = (
-		Array.isArray(keysOrFirstKey)
-			? keysOrFirstKey
-			: [keysOrFirstKey, ...restKeys]
-	) as readonly K[];
-	const result: Partial<Pick<T, K>> = {};
+		Array.isArray(firstKeyOrKeys)
+			? firstKeyOrKeys
+			: [firstKeyOrKeys, ...restKeys]
+	) as readonly (keyof T)[];
+	const result: Partial<T> = {};
 
 	for (const key of keys) {
 		if (hasOwn(object, key)) {
@@ -40,5 +47,5 @@ export function pick<T extends object, const K extends keyof T>(
 		}
 	}
 
-	return result as Pick<T, K>;
+	return result;
 }

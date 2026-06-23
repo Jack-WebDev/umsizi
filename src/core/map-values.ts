@@ -1,8 +1,9 @@
 import { typedKeys } from "./typed-keys";
+import type { MappedValues, ValueMapper } from "./types";
 
 /**
  * Maps the values of an object's own enumerable string-keyed properties while
- * preserving the original key set.
+ * preserving the original enumerable string-key set.
  *
  * @example
  * ```ts
@@ -14,13 +15,9 @@ import { typedKeys } from "./typed-keys";
  */
 export function mapValues<T extends object, R>(
 	object: T,
-	mapper: (
-		value: T[Extract<keyof T, string>],
-		key: Extract<keyof T, string>,
-		object: T,
-	) => R,
-): { [K in keyof T]: R } {
-	const result = {} as { [K in keyof T]: R };
+	mapper: ValueMapper<T, R>,
+): MappedValues<T, R> {
+	const result = {} as MappedValues<T, R>;
 
 	for (const key of typedKeys(object)) {
 		result[key] = mapper(object[key], key, object);

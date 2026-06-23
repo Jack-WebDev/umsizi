@@ -47,7 +47,7 @@
 	"module": "./dist/index.js",
 	"scripts": {
 		"build": "tsdown",
-		"ci": "pnpm run lint && pnpm run check-types && pnpm run test:coverage && pnpm run build && pnpm exec size-limit && pnpm run check:package",
+		"ci": "pnpm run lint && pnpm run check-types && pnpm run check-types:examples && pnpm run test:coverage && pnpm run build && pnpm exec size-limit && pnpm run check:package",
 		"check:package": "pnpm run check:package:npm && pnpm run check:package:jsr",
 		"check:package:jsr": "pnpm dlx jsr publish --dry-run --allow-dirty",
 		"check:package:npm": "HUSKY=0 npm_config_cache=/tmp/umsizi-npm-cache npm pack --dry-run --ignore-scripts",
@@ -56,6 +56,7 @@
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"check-types": "tsc --noEmit",
+		"check-types:examples": "tsc --noEmit --project tsconfig.json --pretty false",
 		"release:publish": "pnpm run build && pnpm exec changeset publish && pnpm dlx jsr publish --allow-dirty",
 		"release:version": "pnpm exec changeset version && node ./scripts/sync-release-version.mjs",
 		"test": "vitest run",

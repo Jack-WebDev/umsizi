@@ -155,7 +155,7 @@ const user = typedFromEntries([
 ```ts
 import { pick } from "umsizi";
 
-pick({ id: "1", name: "Jack", role: "admin" }, ["id", "role"]);
+pick({ id: "1", name: "Jack", role: "admin" }, "id", "role");
 // { id: "1", role: "admin" }
 ```
 
@@ -166,6 +166,14 @@ import { omit } from "umsizi";
 
 omit({ id: "1", name: "Jack", role: "admin" }, "role");
 // { id: "1", name: "Jack" }
+```
+
+For the best autocomplete, prefer the rest-key form for `pick()` and `omit()`.
+If you pass an array literal and want exact key inference, use `as const`:
+
+```ts
+pick(user, ["id", "role"] as const);
+omit(user, ["createdAt"] as const);
 ```
 
 #### `isEmpty`
