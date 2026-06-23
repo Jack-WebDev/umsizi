@@ -1,0 +1,5 @@
+---
+"umsizi": patch
+---
+
+update ci
