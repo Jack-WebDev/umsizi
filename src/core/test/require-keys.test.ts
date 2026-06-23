@@ -28,4 +28,12 @@ describe("requireKeys", () => {
 			requireKeys({ id: "1" } as { id?: string; role?: string }, "id", "role"),
 		).toThrowError(new TypeError("Missing required keys: role"));
 	});
+
+	it("throws the requested keys when the value is not a plain object", () => {
+		const value = [] as unknown as Array<unknown> & { id?: string };
+
+		expect(() => requireKeys(value, "id")).toThrowError(
+			new TypeError("Missing required keys: id"),
+		);
+	});
 });
