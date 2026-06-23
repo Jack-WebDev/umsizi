@@ -1,5 +1,11 @@
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 
+export type PathSegment = string | number;
+
+export type ObjectPath = readonly PathSegment[];
+
+export type PathInput = string | ObjectPath;
+
 export type ObjectEntry<T extends object> = {
 	[K in StringKeyOf<T>]: readonly [K, T[K]];
 }[StringKeyOf<T>];
@@ -46,3 +52,24 @@ export type FilteredValues<
 export type CompactedObject<T extends object> = Partial<{
 	[K in StringKeyOf<T>]: Exclude<T[K], null | undefined>;
 }>;
+
+type PathValueAtSegment<T, K extends PathSegment> = K extends keyof T
+	? T[K]
+	: K extends number
+		? T extends readonly (infer U)[]
+			? U
+			: T extends (infer U)[]
+				? U
+				: never
+		: never;
+
+export type PathValue<T, P extends ObjectPath> = P extends readonly []
+	? T
+	: P extends readonly [
+				infer Head extends PathSegment,
+				...infer Tail extends ObjectPath,
+			]
+		? PathValueAtSegment<T, Head> extends never
+			? never
+			: PathValue<PathValueAtSegment<T, Head>, Tail>
+		: never;

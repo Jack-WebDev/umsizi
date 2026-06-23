@@ -2,13 +2,17 @@ import {
 	assertKeys,
 	compactObject,
 	filterValues,
+	get,
 	hasKeys,
+	hasPath,
 	isPlainObject,
 	isRecord,
 	mapValues,
 	omit,
+	path,
 	pick,
 	requireKeys,
+	set,
 	typedEntries,
 	typedFromEntries,
 	typedKeys,
@@ -45,6 +49,30 @@ console.log(
 	filterValues(record, (value) => typeof value === "string"),
 );
 console.log("compactObject", compactObject(record));
+console.log("path", path("metadata.preferences.theme"));
+console.log(
+	"get",
+	get(
+		{ metadata: { preferences: { theme: "sunrise" } } },
+		"metadata.preferences.theme",
+	),
+);
+console.log(
+	"set",
+	set(
+		{ metadata: { preferences: {} } },
+		"metadata.preferences.theme",
+		"sunrise",
+	),
+);
+console.log(
+	"hasPath",
+	hasPath({ metadata: { preferences: { theme: undefined } } }, [
+		"metadata",
+		"preferences",
+		"theme",
+	]),
+);
 
 const payload: unknown = { id: "usr_1", role: "admin" };
 

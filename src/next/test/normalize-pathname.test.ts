@@ -39,6 +39,24 @@ describe("normalizePathname", () => {
 		expect(normalizePathname("dashboard#section")).toBe("/dashboard#section");
 	});
 
+	it("leaves slashes inside the query string untouched", () => {
+		expect(normalizePathname("dashboard?redirect=//evil.com")).toBe(
+			"/dashboard?redirect=//evil.com",
+		);
+	});
+
+	it("leaves slashes inside the fragment untouched", () => {
+		expect(normalizePathname("dashboard#section//foo")).toBe(
+			"/dashboard#section//foo",
+		);
+	});
+
+	it("still normalizes the path segment when a query string is present", () => {
+		expect(normalizePathname("//dashboard///settings?tab=billing")).toBe(
+			"/dashboard/settings?tab=billing",
+		);
+	});
+
 	it("preserves a single nested segment without duplicate slashes", () => {
 		expect(normalizePathname("/dashboard/settings")).toBe(
 			"/dashboard/settings",

@@ -150,6 +150,45 @@ const user = typedFromEntries([
 ] as const);
 ```
 
+#### `path`
+
+```ts
+import { path } from "umsizi";
+
+path("profile.addresses[0].city");
+// ["profile", "addresses", 0, "city"]
+```
+
+#### `get`
+
+```ts
+import { get } from "umsizi";
+
+get(
+	{ profile: { addresses: [{ city: "Durban" }] } },
+	"profile.addresses[0].city",
+);
+// "Durban"
+```
+
+#### `set`
+
+```ts
+import { set } from "umsizi";
+
+set({}, "profile.addresses[0].city", "Durban");
+// { profile: { addresses: [{ city: "Durban" }] } }
+```
+
+#### `hasPath`
+
+```ts
+import { hasPath } from "umsizi";
+
+hasPath({ profile: { nickname: undefined } }, ["profile", "nickname"]);
+// true
+```
+
 #### `pick`
 
 ```ts
