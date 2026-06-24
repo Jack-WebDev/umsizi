@@ -59,7 +59,10 @@ A pull request should include:
 - the implementation
 - runtime test coverage
 - type-level test coverage
-- README updates when the public API changes
+- a `docs/<name>.md` page for every new or changed utility (see existing
+  pages in [`docs/`](./docs/README.md) for the expected format)
+- a one-line entry + link in README.md's API Reference index, and a link
+  from `docs/README.md`, when the public API changes
 
 ## Releases
 

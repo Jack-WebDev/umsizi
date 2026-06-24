@@ -1,14 +1,18 @@
 import {
 	assertKeys,
 	compactObject,
+	deepClone,
+	deepEqual,
+	deepMerge,
+	diffObject,
 	filterValues,
+	flattenObject,
 	get,
 	groupByKey,
 	hasKeys,
 	hasPath,
 	indexByKey,
 	isPlainObject,
-	isRecord,
 	mapValues,
 	matchByKey,
 	omit,
@@ -16,11 +20,11 @@ import {
 	path,
 	pick,
 	requireKeys,
-	schema,
 	set,
 	typedEntries,
 	typedFromEntries,
 	typedKeys,
+	unflattenObject,
 	validateObject,
 } from "../../src";
 
@@ -81,13 +85,12 @@ console.log(
 );
 
 const payload: unknown = { id: "usr_1", role: "admin" };
-const userSchema = schema({
+const userSchema = {
 	id: (value: unknown): value is string => typeof value === "string",
 	active: (value: unknown): value is boolean => typeof value === "boolean",
-});
+};
 
 console.log("isPlainObject", isPlainObject(payload));
-console.log("isRecord", isRecord(payload));
 console.log(
 	"groupByKey",
 	groupByKey(
@@ -134,3 +137,36 @@ if (isPlainObject(payload) && hasKeys(payload, "id", "role")) {
 const ensured = requireKeys(record, "id", "role");
 assertKeys(ensured, ["id", "role"] as const);
 console.log("required keys", ensured.id, ensured.role);
+
+const original = { profile: { name: "Ada", tags: ["admin"] } };
+const clone = deepClone(original);
+clone.profile.tags.push("member");
+console.log(
+	"deepClone (independent)",
+	original.profile.tags,
+	clone.profile.tags,
+);
+
+console.log("deepEqual", deepEqual({ a: [1, { b: 2 }] }, { a: [1, { b: 2 }] }));
+
+console.log(
+	"deepMerge",
+	deepMerge(
+		{ profile: { name: "Ada", theme: "dark" } },
+		{ profile: { theme: "light" } },
+	),
+);
+
+console.log(
+	"diffObject",
+	diffObject(
+		{ id: "usr_1", name: "Ada", role: "admin" },
+		{ id: "usr_1", name: "Ada Lovelace" },
+	),
+);
+
+const flat = flattenObject({
+	metadata: { preferences: { theme: "sunrise" } },
+});
+console.log("flattenObject", flat);
+console.log("unflattenObject", unflattenObject(flat));

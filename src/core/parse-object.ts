@@ -8,10 +8,10 @@ import { validateObject } from "./validate-object";
  *
  * @example
  * ```ts
- * const user = parseObject(payload, schema({
+ * const user = parseObject(payload, {
  *   id: (value): value is string => typeof value === "string",
  *   active: (value): value is boolean => typeof value === "boolean",
- * }));
+ * });
  * ```
  */
 export function parseObject<const T extends ObjectSchema>(

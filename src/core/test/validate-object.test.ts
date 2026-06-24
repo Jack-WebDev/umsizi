@@ -1,12 +1,11 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
 
-import { schema } from "../schema";
 import { validateObject } from "../validate-object";
 
-const userSchema = schema({
+const userSchema = {
 	id: (value: unknown): value is string => typeof value === "string",
 	active: (value: unknown): value is boolean => typeof value === "boolean",
-});
+};
 
 describe("validateObject", () => {
 	it("returns true for matching objects", () => {
