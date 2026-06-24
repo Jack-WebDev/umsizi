@@ -107,224 +107,24 @@ src/
 
 ### Core Utilities
 
-#### `identity`
+Full signatures, edge cases, and runnable examples for every utility live in
+[`docs/`](./docs/README.md); this section is a quick-reference index.
 
-```ts
-import { identity } from "umsizi";
+**Key/Value Iteration** — [`identity`](./docs/identity.md) returns a value unchanged · [`typedKeys`](./docs/typed-keys.md) typed `Object.keys()` · [`typedEntries`](./docs/typed-entries.md) typed `Object.entries()` · [`typedFromEntries`](./docs/typed-from-entries.md) typed `Object.fromEntries()` · [`mapValues`](./docs/map-values.md) maps values, keeps keys · [`mapKeys`](./docs/map-keys.md) maps keys, keeps values
 
-const value = identity("umsizi");
-// "umsizi"
+**Selection & Filtering** — [`pick`](./docs/pick.md) keeps selected keys · [`omit`](./docs/omit.md) drops selected keys · [`filterValues`](./docs/filter-values.md) filters by value · [`filterKeys`](./docs/filter-keys.md) filters by key · [`partitionObject`](./docs/partition-object.md) splits into matching/non-matching · [`renameKeys`](./docs/rename-keys.md) renames selected keys · [`invertObject`](./docs/invert-object.md) swaps keys and values · [`compactObject`](./docs/compact-object.md) drops `null`/`undefined` values
 
-```
+**Type Checking** — [`isPlainObject`](./docs/is-plain-object.md) guards plain objects · [`isEmpty`](./docs/is-empty.md) checks for no own properties · [`hasOwn`](./docs/has-own.md) typed `Object.hasOwn()` · [`hasKeys`](./docs/has-keys.md) checks required keys exist · [`requireKeys`](./docs/require-keys.md) returns object or throws · [`assertKeys`](./docs/assert-keys.md) asserts required keys exist
 
-#### `typedKeys`
+**Nested Paths** — [`path`](./docs/path.md) parses dot/bracket notation · [`get`](./docs/get.md) reads a nested value · [`set`](./docs/set.md) immutably writes a nested value · [`hasPath`](./docs/has-path.md) checks a nested path exists · [`flattenObject`](./docs/flatten-object.md) flattens to path-notation keys · [`unflattenObject`](./docs/unflatten-object.md) reverses `flattenObject()`
 
-```ts
-import { typedKeys } from "umsizi";
+**Defaults & Merging** — [`defaults`](./docs/defaults.md) fills missing values, one level deep · [`mergeDefaults`](./docs/merge-defaults.md) recursively fills missing values · [`withDefaults`](./docs/with-defaults.md) curries `mergeDefaults()` · [`deepMerge`](./docs/deep-merge.md) recursively merges with the source winning
 
-const user = { id: "1", name: "Jack" } as const;
+**Deep Operations** — [`deepClone`](./docs/deep-clone.md) recursively clones objects/arrays · [`deepEqual`](./docs/deep-equal.md) structural equality check · [`diffObject`](./docs/diff-object.md) computes added/removed/changed keys
 
-typedKeys(user);
-// ["id", "name"]
-```
+**Schema Validation** — [`validateObject`](./docs/validate-object.md) validates against field validators · [`parseObject`](./docs/parse-object.md) validates or throws
 
-#### `typedEntries`
-
-```ts
-import { typedEntries } from "umsizi";
-
-const user = { id: "1", active: true } as const;
-
-typedEntries(user);
-// [["id", "1"], ["active", true]]
-```
-
-#### `typedFromEntries`
-
-```ts
-import { typedFromEntries } from "umsizi";
-
-const user = typedFromEntries([
-	["id", "1"],
-	["active", true],
-] as const);
-```
-
-#### `path`
-
-```ts
-import { path } from "umsizi";
-
-path("profile.addresses[0].city");
-// ["profile", "addresses", 0, "city"]
-```
-
-#### `get`
-
-```ts
-import { get } from "umsizi";
-
-get(
-	{ profile: { addresses: [{ city: "Durban" }] } },
-	"profile.addresses[0].city",
-);
-// "Durban"
-```
-
-#### `set`
-
-```ts
-import { set } from "umsizi";
-
-set({}, "profile.addresses[0].city", "Durban");
-// { profile: { addresses: [{ city: "Durban" }] } }
-```
-
-#### `hasPath`
-
-```ts
-import { hasPath } from "umsizi";
-
-hasPath({ profile: { nickname: undefined } }, ["profile", "nickname"]);
-// true
-```
-
-#### `pick`
-
-```ts
-import { pick } from "umsizi";
-
-pick({ id: "1", name: "Jack", role: "admin" }, "id", "role");
-// { id: "1", role: "admin" }
-```
-
-#### `omit`
-
-```ts
-import { omit } from "umsizi";
-
-omit({ id: "1", name: "Jack", role: "admin" }, "role");
-// { id: "1", name: "Jack" }
-```
-
-For the best autocomplete, prefer the rest-key form for `pick()` and `omit()`.
-If you pass an array literal and want exact key inference, use `as const`:
-
-```ts
-pick(user, ["id", "role"] as const);
-omit(user, ["createdAt"] as const);
-```
-
-#### `isEmpty`
-
-```ts
-import { isEmpty } from "umsizi";
-
-isEmpty({});
-// true
-```
-
-#### `hasOwn`
-
-```ts
-import { hasOwn } from "umsizi";
-
-const user = { id: "1" };
-const key: string = "id";
-
-if (hasOwn(user, key)) {
-	user[key];
-}
-```
-
-#### `isPlainObject`
-
-```ts
-import { isPlainObject } from "umsizi";
-
-const payload: unknown = { id: "1" };
-
-if (isPlainObject(payload)) {
-	payload.id;
-}
-```
-
-#### `isRecord`
-
-```ts
-import { isRecord } from "umsizi";
-
-const payload: unknown = { id: "1" };
-
-if (isRecord(payload)) {
-	payload.id;
-}
-```
-
-#### `hasKeys`
-
-```ts
-import { hasKeys } from "umsizi";
-
-const user = { id: "1", role: "admin" } as const;
-
-if (hasKeys(user, "id", "role")) {
-	user.id;
-	user.role;
-}
-```
-
-#### `requireKeys`
-
-```ts
-import { requireKeys } from "umsizi";
-
-const user = { id: "1", role: "admin" } as const;
-const ensured = requireKeys(user, "id", "role");
-```
-
-#### `assertKeys`
-
-```ts
-import { assertKeys } from "umsizi";
-
-const user: { id?: string; role?: string } = {
-	id: "1",
-	role: "admin",
-};
-
-assertKeys(user, "id", "role");
-
-user.id;
-user.role;
-```
-
-#### `mapValues`
-
-```ts
-import { mapValues } from "umsizi";
-
-mapValues({ draft: 1, published: 2 }, (value) => value * 2);
-// { draft: 2, published: 4 }
-```
-
-#### `filterValues`
-
-```ts
-import { filterValues } from "umsizi";
-
-filterValues({ a: 1, b: 0, c: null }, (value) => value !== null);
-// { a: 1, b: 0 }
-```
-
-#### `compactObject`
-
-```ts
-import { compactObject } from "umsizi";
-
-compactObject({ id: "1", nickname: null, active: false });
-// { id: "1", active: false }
-```
+**Collections** — [`groupByKey`](./docs/group-by-key.md) groups array items by key · [`indexByKey`](./docs/index-by-key.md) indexes array items by key · [`matchByKey`](./docs/match-by-key.md) matches items across two arrays by key
 
 ### React Utilities (`umsizi/react`)
 

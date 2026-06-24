@@ -110,6 +110,12 @@ export type CompactedObject<T extends object> = Partial<{
 	[K in StringKeyOf<T>]: Exclude<T[K], null | undefined>;
 }>;
 
+export type ObjectDiff<T extends object, U extends object> = {
+	added: Partial<Pick<U, Exclude<StringKeyOf<U>, StringKeyOf<T>>>>;
+	removed: Partial<Pick<T, Exclude<StringKeyOf<T>, StringKeyOf<U>>>>;
+	changed: Partial<Pick<U, Extract<StringKeyOf<U>, StringKeyOf<T>>>>;
+};
+
 export type InvertedObject<T extends Record<string, PropertyKey>> = {
 	[K in StringKeyOf<T> as T[K]]: K;
 };
@@ -167,6 +173,24 @@ export type MergeDefaulted<T extends object, D extends object> = Simplify<{
 			: T[K]
 		: K extends keyof D
 			? D[K]
+			: never;
+}>;
+
+type DeepMergeValue<T, S> = S extends readonly unknown[]
+	? S
+	: S extends object
+		? T extends object
+			? DeepMerged<T, S>
+			: S
+		: S;
+
+export type DeepMerged<T extends object, S extends object> = Simplify<{
+	[K in keyof T | keyof S]: K extends keyof S
+		? K extends keyof T
+			? DeepMergeValue<T[K], S[K]>
+			: S[K]
+		: K extends keyof T
+			? T[K]
 			: never;
 }>;
 

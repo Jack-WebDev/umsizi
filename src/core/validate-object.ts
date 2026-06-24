@@ -1,5 +1,5 @@
 import { hasOwn } from "./has-own";
-import { isRecord } from "./is-record";
+import { isPlainObject } from "./is-plain-object";
 import { typedKeys } from "./typed-keys";
 import type { InferSchema, ObjectSchema } from "./types";
 
@@ -13,10 +13,10 @@ import type { InferSchema, ObjectSchema } from "./types";
  * ```ts
  * const isUser = validateObject(
  *   { id: "usr_1", active: true },
- *   schema({
+ *   {
  *     id: (value): value is string => typeof value === "string",
  *     active: (value): value is boolean => typeof value === "boolean",
- *   }),
+ *   },
  * );
  * ```
  */
@@ -24,7 +24,7 @@ export function validateObject<const T extends ObjectSchema>(
 	value: unknown,
 	definition: T,
 ): value is InferSchema<T> {
-	if (!isRecord(value)) return false;
+	if (!isPlainObject(value)) return false;
 
 	for (const key of typedKeys(definition)) {
 		if (!hasOwn(value, key)) return false;
