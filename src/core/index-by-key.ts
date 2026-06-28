@@ -1,9 +1,13 @@
 import type { IndexedByKey, KeyableKeyOf } from "./types";
 
 /**
- * Indexes items by a property whose value can be used as an object key.
+ * Creates an object that maps each item's key value to the item itself.
  *
  * Later items overwrite earlier items with the same key.
+ *
+ * @param items - Items to index.
+ * @param key - The property whose value becomes each object's key.
+ * @returns An object mapping each key value to the corresponding item.
  *
  * @example
  * ```ts

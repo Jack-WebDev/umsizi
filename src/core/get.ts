@@ -28,6 +28,14 @@ export function get<T, D>(
 	path: string,
 	defaultValue: D,
 ): D | unknown;
+/**
+ * Gets the value at the specified path in an object.
+ *
+ * @param object - The object to read from
+ * @param pathInput - The path to the value
+ * @param defaultValue - The value to return when the path is not found
+ * @returns The value at `pathInput`, or `defaultValue` when no value is found
+ */
 export function get<T, D>(
 	object: T,
 	pathInput: PathInput,

@@ -1,6 +1,12 @@
 import { path as toPath } from "./path";
 import type { ObjectPath, PathSegment, SetPathValue } from "./types";
 
+/**
+ * Determines whether a value is an object container.
+ *
+ * @param value - The value to check
+ * @returns `true` if `value` is a non-null object, `false` otherwise
+ */
 function isContainer(value: unknown): value is object {
 	return typeof value === "object" && value !== null;
 }
@@ -26,6 +32,15 @@ function cloneContainer(value: unknown, nextSegment: PathSegment | undefined) {
 	return createContainer(nextSegment);
 }
 
+/**
+ * Sets a value at the specified path within a cloned container.
+ *
+ * @param current - The current value at this level of the path.
+ * @param segments - The path segments to follow.
+ * @param value - The value to assign at the final segment.
+ * @param index - The current position within `segments`.
+ * @returns The cloned container with the path updated.
+ */
 function setAtPath(
 	current: unknown,
 	segments: ObjectPath,
@@ -71,6 +86,14 @@ export function set(
 	pathInput: string,
 	value: unknown,
 ): Record<string, unknown>;
+/**
+ * Sets a value at the given path in an object.
+ *
+ * @param object - The source object
+ * @param pathInput - The path to update, as a string or path segment array
+ * @param value - The value to set
+ * @returns The object with the path updated, or the original object when the path is empty
+ */
 export function set<T extends object>(
 	object: T,
 	pathInput: string | readonly PathSegment[],

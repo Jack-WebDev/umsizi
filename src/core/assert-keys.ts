@@ -37,6 +37,13 @@ export function assertKeys<T>(
 	value: T,
 	keys: readonly KeysFor<T>[],
 ): asserts value is T & KeyedRecord<T>;
+/**
+ * Asserts that a value contains the specified keys.
+ *
+ * @param value - The value to check.
+ * @param firstKeyOrKeys - A key to require, or an array of keys to require.
+ * @param restKeys - Additional keys to require when `firstKeyOrKeys` is a single key.
+ */
 export function assertKeys(
 	value: unknown,
 	firstKeyOrKeys: PropertyKey | readonly PropertyKey[],

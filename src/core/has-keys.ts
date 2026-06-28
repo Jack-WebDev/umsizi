@@ -37,6 +37,14 @@ export function hasKeys<T>(
 	value: T,
 	keys: readonly KeysFor<T>[],
 ): value is T & KeyedRecord<T>;
+/**
+ * Determines whether a plain object has all requested own keys.
+ *
+ * @param value - The value to inspect.
+ * @param firstKeyOrKeys - The first key to check, or a read-only array of keys.
+ * @param restKeys - Additional keys to check when `firstKeyOrKeys` is a single key.
+ * @returns `true` if `value` is a plain object with all requested own keys, `false` otherwise.
+ */
 export function hasKeys(
 	value: unknown,
 	firstKeyOrKeys: PropertyKey | readonly PropertyKey[],
