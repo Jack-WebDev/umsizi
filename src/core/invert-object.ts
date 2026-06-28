@@ -18,7 +18,7 @@ import type { InvertedObject } from "./types";
 export function invertObject<T extends Record<string, PropertyKey>>(
 	object: T,
 ): InvertedObject<T> {
-	const result = {} as InvertedObject<T>;
+	const result = Object.create(null) as InvertedObject<T>;
 
 	for (const key of typedKeys(object)) {
 		const value = object[key] as PropertyKey;

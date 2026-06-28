@@ -2,6 +2,8 @@ import type { ObjectPath, PathInput, PathSegment } from "./types";
 
 const BRACKET_PATH_SEGMENT_PATTERN =
 	/[^.[\]]+|\[(?:([^"'[\]]+)|(["'])(.*?)\2)\]/g;
+const PATH_CACHE_LIMIT = 200;
+const pathCache = new Map<string, ObjectPath>();
 
 function toPathSegment(value: string): PathSegment {
 	return /^\d+$/.test(value) ? Number(value) : value;
@@ -18,13 +20,18 @@ function toPathSegment(value: string): PathSegment {
  */
 export function path(input: PathInput): ObjectPath {
 	if (typeof input !== "string") {
-		return [...input];
+		return input;
 	}
 
-	const source = input;
+	const cached = pathCache.get(input);
+
+	if (cached) {
+		return cached;
+	}
+
 	const segments: PathSegment[] = [];
 
-	for (const match of source.matchAll(BRACKET_PATH_SEGMENT_PATTERN)) {
+	for (const match of input.matchAll(BRACKET_PATH_SEGMENT_PATTERN)) {
 		const [, bareSegment, , quotedSegment] = match;
 		const segment = quotedSegment ?? bareSegment ?? match[0];
 
@@ -33,5 +40,13 @@ export function path(input: PathInput): ObjectPath {
 		}
 	}
 
-	return segments;
+	const result = Object.freeze(segments.slice()) as ObjectPath;
+
+	if (pathCache.size >= PATH_CACHE_LIMIT) {
+		pathCache.clear();
+	}
+
+	pathCache.set(input, result);
+
+	return result;
 }

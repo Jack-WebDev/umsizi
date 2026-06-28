@@ -1,18 +1,6 @@
-import { hasOwn } from "./has-own";
 import { path as toPath } from "./path";
+import { lookupPathValue } from "./path-traversal";
 import type { ObjectPath, PathInput, PathValue } from "./types";
-
-function hasMissingPathSegment(
-	value: unknown,
-	segment: string | number,
-): boolean {
-	return (
-		value === null ||
-		value === undefined ||
-		(typeof value !== "object" && typeof value !== "function") ||
-		!hasOwn(value, segment)
-	);
-}
 
 /**
  * Reads a nested own property using a tuple path or dot/bracket notation.
@@ -45,16 +33,7 @@ export function get<T, D>(
 	pathInput: PathInput,
 	defaultValue?: D,
 ): D | unknown {
-	const segments = toPath(pathInput);
-	let current: unknown = object;
+	const result = lookupPathValue(object, toPath(pathInput));
 
-	for (const segment of segments) {
-		if (hasMissingPathSegment(current, segment)) {
-			return defaultValue;
-		}
-
-		current = (current as Record<string | number, unknown>)[segment];
-	}
-
-	return current;
+	return result.found ? result.value : defaultValue;
 }

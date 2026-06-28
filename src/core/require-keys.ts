@@ -1,4 +1,6 @@
 import { hasKeys } from "./has-keys";
+import { isPlainObject } from "./is-plain-object";
+import type { KeyedRecord, KeysFor, RequiredKeysResult } from "./types";
 
 /**
  * Requires that a plain object has all of the requested own keys.
@@ -14,49 +16,45 @@ import { hasKeys } from "./has-keys";
  * ```
  */
 export function requireKeys<
-	T extends object,
-	const FirstKey extends keyof T,
-	const RestKeys extends readonly (keyof T)[],
+	T,
+	const FirstKey extends KeysFor<T>,
+	const RestKeys extends readonly KeysFor<T>[],
 >(
 	value: T,
 	firstKey: FirstKey,
 	...restKeys: RestKeys
-): T & Required<Pick<T, FirstKey | RestKeys[number]>>;
+): RequiredKeysResult<T, Extract<FirstKey | RestKeys[number], PropertyKey>>;
 export function requireKeys<
-	T extends object,
-	const FirstKey extends keyof T,
-	const RestKeys extends readonly (keyof T)[],
+	T,
+	const FirstKey extends KeysFor<T>,
+	const RestKeys extends readonly KeysFor<T>[],
 >(
 	value: T,
 	keys: readonly [FirstKey, ...RestKeys],
-): T & Required<Pick<T, FirstKey | RestKeys[number]>>;
-export function requireKeys<T extends object>(
+): RequiredKeysResult<T, Extract<FirstKey | RestKeys[number], PropertyKey>>;
+export function requireKeys<T>(
 	value: T,
-	keys: readonly (keyof T)[],
-): T;
-export function requireKeys<T extends object>(
-	value: T,
-	firstKeyOrKeys: keyof T | readonly (keyof T)[],
-	...restKeys: readonly (keyof T)[]
-): T {
+	keys: readonly KeysFor<T>[],
+): KeyedRecord<T>;
+export function requireKeys(
+	value: unknown,
+	firstKeyOrKeys: PropertyKey | readonly PropertyKey[],
+	...restKeys: readonly PropertyKey[]
+): KeyedRecord<unknown> {
 	const keys = Array.isArray(firstKeyOrKeys)
 		? firstKeyOrKeys
-		: ([firstKeyOrKeys, ...restKeys] as readonly (keyof T)[]);
+		: [firstKeyOrKeys, ...restKeys];
 
 	if (hasKeys(value, keys)) {
 		return value;
 	}
 
-	const missingKeys: Array<keyof T> = [];
+	const missingKeys: PropertyKey[] = [];
 
-	if (value !== null && typeof value === "object") {
-		const prototype = Object.getPrototypeOf(value);
-
-		if (prototype === Object.prototype || prototype === null) {
-			for (const key of keys) {
-				if (!Object.hasOwn(value, key)) {
-					missingKeys.push(key);
-				}
+	if (isPlainObject(value)) {
+		for (const key of keys) {
+			if (!Object.hasOwn(value, key)) {
+				missingKeys.push(key);
 			}
 		}
 	}

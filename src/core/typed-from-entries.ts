@@ -1,4 +1,4 @@
-import type { EntryTuples, ObjectFromEntries } from "./types";
+import type { EntryTuples, FromEntriesLastWriteWins } from "./types";
 
 /**
  * Creates an object from entries while preserving the key and value types from
@@ -18,6 +18,6 @@ import type { EntryTuples, ObjectFromEntries } from "./types";
  */
 export function typedFromEntries<const T extends EntryTuples>(
 	entries: T,
-): ObjectFromEntries<T> {
-	return Object.fromEntries(entries) as ObjectFromEntries<T>;
+): FromEntriesLastWriteWins<T> {
+	return Object.fromEntries(entries) as FromEntriesLastWriteWins<T>;
 }

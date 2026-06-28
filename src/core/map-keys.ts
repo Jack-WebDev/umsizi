@@ -19,7 +19,7 @@ export function mapKeys<T extends object, R extends string>(
 	object: T,
 	mapper: KeyMapper<T, R>,
 ): MappedKeys<T, R> {
-	const result = {} as MappedKeys<T, R>;
+	const result = Object.create(null) as MappedKeys<T, R>;
 
 	for (const key of typedKeys(object)) {
 		const mappedKey = mapper(key, object[key], object);

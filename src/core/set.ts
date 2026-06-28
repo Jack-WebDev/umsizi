@@ -1,5 +1,5 @@
 import { path as toPath } from "./path";
-import type { PathInput, PathSegment } from "./types";
+import type { ObjectPath, PathSegment, SetPathValue } from "./types";
 
 function isContainer(value: unknown): value is object {
 	return typeof value === "object" && value !== null;
@@ -28,25 +28,24 @@ function cloneContainer(value: unknown, nextSegment: PathSegment | undefined) {
 
 function setAtPath(
 	current: unknown,
-	segments: readonly PathSegment[],
+	segments: ObjectPath,
 	value: unknown,
+	index: number,
 ): unknown {
-	const [segment, ...rest] = segments as readonly [
-		PathSegment,
-		...PathSegment[],
-	];
-
+	const segment = segments[index] as PathSegment;
 	const clone = cloneContainer(current, segment) as Record<
 		PropertyKey,
 		unknown
 	>;
 	const existingValue =
-		isContainer(current) || Array.isArray(current)
+		Array.isArray(current) || isContainer(current)
 			? (current as Record<string | number, unknown>)[segment]
 			: undefined;
 
 	clone[segment] =
-		rest.length === 0 ? value : setAtPath(existingValue, rest, value);
+		index === segments.length - 1
+			? value
+			: setAtPath(existingValue, segments, value, index + 1);
 
 	return clone;
 }
@@ -57,16 +56,31 @@ function setAtPath(
  * Missing containers are created automatically. Only the updated path is
  * cloned; untouched branches retain their existing references.
  */
+export function set<T extends object, V>(
+	object: T,
+	pathInput: readonly [],
+	value: V,
+): T;
+export function set<
+	T extends object,
+	const P extends readonly [PathSegment, ...PathSegment[]],
+	V,
+>(object: T, pathInput: P, value: V): SetPathValue<T, P, V>;
+export function set(
+	object: object,
+	pathInput: string,
+	value: unknown,
+): Record<string, unknown>;
 export function set<T extends object>(
 	object: T,
-	pathInput: PathInput,
+	pathInput: string | readonly PathSegment[],
 	value: unknown,
-): T {
+): T | Record<string, unknown> {
 	const segments = toPath(pathInput);
 
 	if (segments.length === 0) {
 		return object;
 	}
 
-	return setAtPath(object, segments, value) as T;
+	return setAtPath(object, segments, value, 0) as T | Record<string, unknown>;
 }

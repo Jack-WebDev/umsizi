@@ -22,4 +22,24 @@ describe("unflattenObject", () => {
 	it("returns an empty object for an empty input", () => {
 		expect(unflattenObject({})).toEqual({});
 	});
+
+	it("preserves empty nested objects and arrays during round trips", () => {
+		const original = {
+			profile: { meta: {} },
+			addresses: [],
+		};
+
+		expect(unflattenObject(flattenObject(original))).toEqual(original);
+	});
+
+	it("ignores flat entries whose path parses to no segments", () => {
+		expect(
+			unflattenObject({
+				"": "ignored",
+				"profile.name": "Umsizi",
+			}),
+		).toEqual({
+			profile: { name: "Umsizi" },
+		});
+	});
 });

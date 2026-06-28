@@ -37,4 +37,16 @@ describe("indexByKey", () => {
 			(typeof users)[number] | undefined
 		>();
 	});
+
+	it("rejects non-keyable index fields at compile time", () => {
+		const users = [{ id: "1", meta: { active: true } }];
+		const shouldRunTypeChecks = false as boolean;
+
+		if (shouldRunTypeChecks) {
+			// @ts-expect-error non-keyable field
+			indexByKey(users, "meta");
+		}
+
+		expect(users).toHaveLength(1);
+	});
 });

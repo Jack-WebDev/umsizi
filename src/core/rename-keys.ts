@@ -20,7 +20,7 @@ export function renameKeys<
 	T extends object,
 	const M extends Partial<Record<Extract<keyof T, string>, string>>,
 >(object: T, names: M): RenamedKeys<T, M> {
-	const result = {} as RenamedKeys<T, M>;
+	const result = Object.create(null) as RenamedKeys<T, M>;
 
 	for (const key of typedKeys(object)) {
 		const renamedKey = (hasOwn(names, key) ? names[key] : key) as string;

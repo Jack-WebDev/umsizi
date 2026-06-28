@@ -51,6 +51,14 @@ describe("requireKeys", () => {
 		);
 	});
 
+	it("returns a keyed record when the input is unknown", () => {
+		const value: unknown = { id: "1", role: "admin" };
+		const result = requireKeys(value, "id", "role");
+
+		expectTypeOf(result.id).toEqualTypeOf<unknown>();
+		expectTypeOf(result.role).toEqualTypeOf<unknown>();
+	});
+
 	it("rejects zero rest keys at compile time", () => {
 		const value = { id: "1", role: "admin" } as const;
 		const shouldRunTypeChecks = false as boolean;

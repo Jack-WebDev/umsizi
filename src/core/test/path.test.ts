@@ -24,11 +24,32 @@ describe("path", () => {
 		expect(path("settings[''].enabled")).toEqual(["settings", "enabled"]);
 	});
 
-	it("returns a shallow copy when given an array path", () => {
+	it("returns the original tuple when given an array path", () => {
 		const input = ["profile", "name"] as const;
 		const result = path(input);
 
 		expect(result).toEqual(["profile", "name"]);
-		expect(result).not.toBe(input);
+		expect(result).toBe(input);
+	});
+
+	it("reuses frozen cached paths for repeated string lookups", () => {
+		const first = path("profile.addresses[0].city");
+		const second = path("profile.addresses[0].city");
+
+		expect(second).toBe(first);
+		expect(Object.isFrozen(first)).toBe(true);
+	});
+
+	it("clears the cache when the path cache limit is exceeded", () => {
+		const original = path("cache.original");
+
+		for (let index = 0; index <= 200; index += 1) {
+			path(`cache.entry${index}`);
+		}
+
+		const reparsed = path("cache.original");
+
+		expect(reparsed).toEqual(["cache", "original"]);
+		expect(reparsed).not.toBe(original);
 	});
 });

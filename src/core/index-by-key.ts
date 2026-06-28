@@ -1,4 +1,4 @@
-import type { IndexedByKey } from "./types";
+import type { IndexedByKey, KeyableKeyOf } from "./types";
 
 /**
  * Indexes items by a property whose value can be used as an object key.
@@ -17,11 +17,11 @@ import type { IndexedByKey } from "./types";
  * // { 1: { ... }, 2: { ... } }
  * ```
  */
-export function indexByKey<T extends object, K extends keyof T>(
+export function indexByKey<T extends object, K extends KeyableKeyOf<T>>(
 	items: ReadonlyArray<T>,
 	key: K,
 ): IndexedByKey<T, K> {
-	const result = {} as IndexedByKey<T, K>;
+	const result = Object.create(null) as IndexedByKey<T, K>;
 
 	for (const item of items) {
 		result[item[key] as Extract<T[K], PropertyKey>] = item;
