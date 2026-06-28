@@ -1,5 +1,11 @@
 # umsizi
 
+## 0.10.1
+
+### Patch Changes
+
+- f40be1e: Tightened core public typings
+
 ## 0.10.0
 
 ### Minor Changes
