@@ -6,7 +6,8 @@ import type { RenamedKeys } from "./types";
  * Renames selected own enumerable string-keyed properties using a key map.
  *
  * Unmapped keys are copied through unchanged. When multiple source keys resolve
- * to the same target key, the later assignment wins.
+ * to the same target key, the later assignment wins. The returned object has a
+ * null prototype.
  *
  * @example
  * ```ts
@@ -15,6 +16,8 @@ import type { RenamedKeys } from "./types";
  * renameKeys(user, { givenName: "name" });
  * // { id: "1", name: "Umsizi" }
  * ```
+ *
+ * @returns A new object containing the original values under their renamed keys.
  */
 export function renameKeys<
 	T extends object,

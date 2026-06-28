@@ -5,18 +5,23 @@ const BRACKET_PATH_SEGMENT_PATTERN =
 const PATH_CACHE_LIMIT = 200;
 const pathCache = new Map<string, ObjectPath>();
 
+/**
+ * Converts a path segment to a number when it contains only digits.
+ *
+ * @param value - The segment text to convert
+ * @returns The numeric value for digit-only input, or the original string
+ */
 function toPathSegment(value: string): PathSegment {
 	return /^\d+$/.test(value) ? Number(value) : value;
 }
 
 /**
- * Converts dot/bracket notation into a normalized object path array.
+ * Normalizes a path input into an object path array.
  *
- * @example
- * ```ts
- * path("profile.addresses[0].city");
- * // ["profile", "addresses", 0, "city"]
- * ```
+ * String inputs are parsed from dot and bracket notation, and non-string inputs are returned unchanged.
+ *
+ * @param input - The path input to normalize.
+ * @returns A frozen object path for string input, or `input` unchanged when it is already a path.
  */
 export function path(input: PathInput): ObjectPath {
 	if (typeof input !== "string") {

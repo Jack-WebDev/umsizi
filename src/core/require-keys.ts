@@ -36,6 +36,15 @@ export function requireKeys<T>(
 	value: T,
 	keys: readonly KeysFor<T>[],
 ): KeyedRecord<T>;
+/**
+ * Ensures that a value has the specified own keys.
+ *
+ * @param value - The value to check.
+ * @param firstKeyOrKeys - The first required key, or the full list of required keys.
+ * @param restKeys - Additional required keys when `firstKeyOrKeys` is a single key.
+ * @returns The original value when all required keys are present.
+ * @throws {TypeError} Thrown when one or more required keys are missing.
+ */
 export function requireKeys(
 	value: unknown,
 	firstKeyOrKeys: PropertyKey | readonly PropertyKey[],

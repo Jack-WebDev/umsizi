@@ -2,10 +2,10 @@ import { typedKeys } from "./typed-keys";
 import type { KeyMapper, MappedKeys } from "./types";
 
 /**
- * Maps an object's own enumerable string keys to new string keys.
+ * Creates a new object with remapped own enumerable string keys.
  *
- * When multiple source keys map to the same target key, the later assignment
- * wins.
+ * The returned object has a null prototype. When multiple source keys map to
+ * the same target key, the later assignment wins.
  *
  * @example
  * ```ts

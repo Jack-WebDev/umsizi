@@ -37,6 +37,15 @@ export function matchByKey<
 	leftKey: LK,
 	rightKey: RK,
 ): Array<KeyMatch<Extract<L[LK] & R[RK], PropertyKey>, L, R>>;
+/**
+ * Matches items from two arrays by key.
+ *
+ * @param leftItems - The left-side items to match.
+ * @param rightItems - The right-side items to match.
+ * @param leftKey - The key to read from each left-side item.
+ * @param rightKey - The key to read from each right-side item.
+ * @returns An array of key match objects for each left and right item pair with the same key.
+ */
 export function matchByKey<
 	L extends object,
 	R extends object,
