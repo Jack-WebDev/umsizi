@@ -1,5 +1,5 @@
 import { groupByKey } from "./group-by-key";
-import type { KeyMatch } from "./types";
+import type { KeyableKeyOf, KeyMatch } from "./types";
 
 /**
  * Matches items from two arrays when their key values are equal.
@@ -20,7 +20,7 @@ import type { KeyMatch } from "./types";
 export function matchByKey<
 	L extends object,
 	R extends object,
-	K extends keyof L & keyof R,
+	K extends KeyableKeyOf<L> & KeyableKeyOf<R>,
 >(
 	leftItems: ReadonlyArray<L>,
 	rightItems: ReadonlyArray<R>,
@@ -29,26 +29,35 @@ export function matchByKey<
 export function matchByKey<
 	L extends object,
 	R extends object,
-	LK extends keyof L,
-	RK extends keyof R,
+	LK extends KeyableKeyOf<L>,
+	RK extends KeyableKeyOf<R>,
 >(
 	leftItems: ReadonlyArray<L>,
 	rightItems: ReadonlyArray<R>,
 	leftKey: LK,
 	rightKey: RK,
 ): Array<KeyMatch<Extract<L[LK] & R[RK], PropertyKey>, L, R>>;
+/**
+ * Matches items from two arrays by key.
+ *
+ * @param leftItems - The left-side items to match.
+ * @param rightItems - The right-side items to match.
+ * @param leftKey - The key to read from each left-side item.
+ * @param rightKey - The key to read from each right-side item.
+ * @returns An array of key match objects for each left and right item pair with the same key.
+ */
 export function matchByKey<
 	L extends object,
 	R extends object,
-	LK extends keyof L,
-	RK extends keyof R,
+	LK extends KeyableKeyOf<L>,
+	RK extends KeyableKeyOf<R>,
 >(
 	leftItems: ReadonlyArray<L>,
 	rightItems: ReadonlyArray<R>,
 	leftKey: LK,
 	rightKey?: RK,
 ): Array<KeyMatch<PropertyKey, L, R>> {
-	const resolvedRightKey = (rightKey ?? leftKey) as keyof R;
+	const resolvedRightKey = (rightKey ?? leftKey) as KeyableKeyOf<R>;
 	const rightIndex = groupByKey(rightItems, resolvedRightKey) as Record<
 		PropertyKey,
 		Array<R> | undefined

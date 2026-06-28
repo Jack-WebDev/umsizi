@@ -45,7 +45,7 @@ describe("mapKeys", () => {
 		const result = mapKeys(source, (key) => `user_${key}` as const);
 
 		expectTypeOf(result).toEqualTypeOf<
-			Record<"user_id" | "user_active", "1" | true>
+			Partial<Record<"user_id" | "user_active", "1" | true>>
 		>();
 	});
 

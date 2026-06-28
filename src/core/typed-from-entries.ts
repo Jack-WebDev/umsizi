@@ -1,23 +1,13 @@
-import type { EntryTuples, ObjectFromEntries } from "./types";
+import type { EntryTuples, FromEntriesLastWriteWins } from "./types";
 
 /**
- * Creates an object from entries while preserving the key and value types from
- * the input tuple array.
+ * Creates an object from entry tuples while preserving the inferred key and value types.
  *
- * This is a typed wrapper around `Object.fromEntries`.
- *
- * @example
- * ```ts
- * const status = typedFromEntries([
- *   ["id", "1"],
- *   ["active", true],
- * ] as const);
- *
- * // inferred as: { id: "1"; active: true }
- * ```
+ * @param entries - The entries used to build the object
+ * @returns The object created from `entries`, with later entries taking precedence for duplicate keys
  */
 export function typedFromEntries<const T extends EntryTuples>(
 	entries: T,
-): ObjectFromEntries<T> {
-	return Object.fromEntries(entries) as ObjectFromEntries<T>;
+): FromEntriesLastWriteWins<T> {
+	return Object.fromEntries(entries) as FromEntriesLastWriteWins<T>;
 }

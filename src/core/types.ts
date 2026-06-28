@@ -16,9 +16,19 @@ export type EntryTuple = readonly [PropertyKey, unknown];
 
 export type EntryTuples = ReadonlyArray<EntryTuple>;
 
-export type ObjectFromEntries<T extends EntryTuples> = {
-	[K in T[number] as K[0]]: K[1];
-};
+type Simplify<T> = { [K in keyof T]: T[K] } & {};
+
+type AssignEntry<T, E extends EntryTuple> = Simplify<
+	Omit<T, E[0]> & { [K in E[0]]: E[1] }
+>;
+
+export type FromEntriesLastWriteWins<T extends EntryTuples> =
+	T extends readonly [
+		...infer Rest extends EntryTuples,
+		infer Last extends EntryTuple,
+	]
+		? AssignEntry<FromEntriesLastWriteWins<Rest>, Last>
+		: {};
 
 export type ValueMapper<T extends object, R> = (
 	value: T[StringKeyOf<T>],
@@ -60,9 +70,8 @@ export type MappedValues<T extends object, R> = {
 	[K in StringKeyOf<T>]: R;
 };
 
-export type MappedKeys<T extends object, R extends string> = Record<
-	R,
-	T[StringKeyOf<T>]
+export type MappedKeys<T extends object, R extends string> = Partial<
+	Record<R, T[StringKeyOf<T>]>
 >;
 
 export type RenamedKeys<
@@ -130,11 +139,25 @@ export type InferSchema<T extends ObjectSchema> = {
 	[K in keyof T]: SchemaValue<T[K]>;
 };
 
-export type GroupedByKey<T extends object, K extends keyof T> = Partial<
+export type KeyableKeyOf<T extends object> = {
+	[K in keyof T]-?: T[K] extends PropertyKey ? K : never;
+}[keyof T];
+
+export type KeysFor<T> = [T] extends [object] ? keyof T : PropertyKey;
+
+export type KeyedRecord<T> = T extends object
+	? T
+	: Record<PropertyKey, unknown>;
+
+export type RequiredKeysResult<T, K extends PropertyKey> = T extends object
+	? T & Required<Pick<T, Extract<K, keyof T>>>
+	: Record<K, unknown>;
+
+export type GroupedByKey<T extends object, K extends KeyableKeyOf<T>> = Partial<
 	Record<Extract<T[K], PropertyKey>, Array<T>>
 >;
 
-export type IndexedByKey<T extends object, K extends keyof T> = Partial<
+export type IndexedByKey<T extends object, K extends KeyableKeyOf<T>> = Partial<
 	Record<Extract<T[K], PropertyKey>, T>
 >;
 
@@ -143,8 +166,6 @@ export type KeyMatch<K extends PropertyKey, L, R> = {
 	left: L;
 	right: R;
 };
-
-type Simplify<T> = { [K in keyof T]: T[K] } & {};
 
 type WithDefault<T, D> = undefined extends T ? Exclude<T, undefined> | D : T;
 
@@ -214,3 +235,50 @@ export type PathValue<T, P extends ObjectPath> = P extends readonly []
 			? never
 			: PathValue<PathValueAtSegment<T, Head>, Tail>
 		: never;
+
+type BuildPathValue<P extends ObjectPath, V> = P extends readonly []
+	? V
+	: P extends readonly [
+				infer Head extends PathSegment,
+				...infer Tail extends ObjectPath,
+			]
+		? Head extends number
+			? Array<BuildPathValue<Tail, V>>
+			: { [K in Head]: BuildPathValue<Tail, V> }
+		: never;
+
+type ArrayElement<T> = T extends readonly (infer U)[] ? U : never;
+
+type SetObjectProperty<
+	T extends object,
+	K extends PropertyKey,
+	P extends ObjectPath,
+	V,
+> = Simplify<
+	Omit<T, K> & {
+		[K2 in K]: K2 extends keyof T
+			? SetPathValue<T[K2], P, V>
+			: BuildPathValue<P, V>;
+	}
+>;
+
+type SetArrayValue<
+	T extends readonly unknown[],
+	P extends ObjectPath,
+	V,
+> = Array<ArrayElement<T> | SetPathValue<ArrayElement<T>, P, V>>;
+
+export type SetPathValue<T, P extends ObjectPath, V> = P extends readonly []
+	? V
+	: P extends readonly [
+				infer Head extends PathSegment,
+				...infer Tail extends ObjectPath,
+			]
+		? T extends readonly unknown[]
+			? Head extends number
+				? SetArrayValue<T, Tail, V>
+				: SetObjectProperty<T, Head, Tail, V>
+			: T extends object
+				? SetObjectProperty<T, Head, Tail, V>
+				: BuildPathValue<P, V>
+		: T;

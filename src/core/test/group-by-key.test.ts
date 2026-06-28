@@ -20,7 +20,7 @@ describe("groupByKey", () => {
 	});
 
 	it("returns an empty object for empty input", () => {
-		expect(groupByKey([], "id")).toEqual({});
+		expect(groupByKey([] as Array<{ id: string }>, "id")).toEqual({});
 	});
 
 	it("preserves grouped item types", () => {
@@ -32,5 +32,17 @@ describe("groupByKey", () => {
 
 		expectTypeOf(result.admin).toEqualTypeOf<typeof users | undefined>();
 		expectTypeOf(result.member).toEqualTypeOf<typeof users | undefined>();
+	});
+
+	it("rejects non-keyable grouping fields at compile time", () => {
+		const users = [{ id: "1", meta: { role: "admin" } }];
+		const shouldRunTypeChecks = false as boolean;
+
+		if (shouldRunTypeChecks) {
+			// @ts-expect-error non-keyable field
+			groupByKey(users, "meta");
+		}
+
+		expect(users).toHaveLength(1);
 	});
 });

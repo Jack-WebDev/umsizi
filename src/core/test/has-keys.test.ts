@@ -87,6 +87,15 @@ describe("hasKeys", () => {
 		}
 	});
 
+	it("narrows unknown values to keyed records", () => {
+		const value: unknown = { id: "1", role: "admin" };
+
+		if (hasKeys(value, "id", "role")) {
+			expectTypeOf(value.id).toEqualTypeOf<unknown>();
+			expectTypeOf(value.role).toEqualTypeOf<unknown>();
+		}
+	});
+
 	it("rejects invalid literal keys at compile time", () => {
 		const value = { id: "1", role: "admin" } as const;
 		const shouldRunTypeChecks = false as boolean;

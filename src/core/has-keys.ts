@@ -1,3 +1,6 @@
+import { isPlainObject } from "./is-plain-object";
+import type { KeyedRecord, KeysFor, RequiredKeysResult } from "./types";
+
 /**
  * Checks whether a plain object has all of the requested own keys.
  *
@@ -12,44 +15,48 @@
  * ```
  */
 export function hasKeys<
-	T extends object,
-	const FirstKey extends keyof T,
-	const RestKeys extends readonly (keyof T)[],
+	T,
+	const FirstKey extends KeysFor<T>,
+	const RestKeys extends readonly KeysFor<T>[],
 >(
 	value: T,
 	firstKey: FirstKey,
 	...restKeys: RestKeys
-): value is T & Required<Pick<T, FirstKey | RestKeys[number]>>;
+): value is T &
+	RequiredKeysResult<T, Extract<FirstKey | RestKeys[number], PropertyKey>>;
 export function hasKeys<
-	T extends object,
-	const FirstKey extends keyof T,
-	const RestKeys extends readonly (keyof T)[],
+	T,
+	const FirstKey extends KeysFor<T>,
+	const RestKeys extends readonly KeysFor<T>[],
 >(
 	value: T,
 	keys: readonly [FirstKey, ...RestKeys],
-): value is T & Required<Pick<T, FirstKey | RestKeys[number]>>;
-export function hasKeys<T extends object>(
+): value is T &
+	RequiredKeysResult<T, Extract<FirstKey | RestKeys[number], PropertyKey>>;
+export function hasKeys<T>(
 	value: T,
-	keys: readonly (keyof T)[],
-): value is T;
-export function hasKeys<T extends object>(
-	value: T,
-	firstKeyOrKeys: keyof T | readonly (keyof T)[],
-	...restKeys: readonly (keyof T)[]
+	keys: readonly KeysFor<T>[],
+): value is T & KeyedRecord<T>;
+/**
+ * Determines whether a plain object has all requested own keys.
+ *
+ * @param value - The value to inspect.
+ * @param firstKeyOrKeys - The first key to check, or a read-only array of keys.
+ * @param restKeys - Additional keys to check when `firstKeyOrKeys` is a single key.
+ * @returns `true` if `value` is a plain object with all requested own keys, `false` otherwise.
+ */
+export function hasKeys(
+	value: unknown,
+	firstKeyOrKeys: PropertyKey | readonly PropertyKey[],
+	...restKeys: readonly PropertyKey[]
 ): boolean {
-	if (value === null || typeof value !== "object") {
-		return false;
-	}
-
-	const prototype = Object.getPrototypeOf(value);
-
-	if (prototype !== Object.prototype && prototype !== null) {
+	if (!isPlainObject(value)) {
 		return false;
 	}
 
 	const keys = Array.isArray(firstKeyOrKeys)
 		? firstKeyOrKeys
-		: ([firstKeyOrKeys, ...restKeys] as readonly (keyof T)[]);
+		: [firstKeyOrKeys, ...restKeys];
 
 	for (const key of keys) {
 		if (!Object.hasOwn(value, key)) {
