@@ -70,4 +70,20 @@ describe("matchByKey", () => {
 			}>
 		>();
 	});
+
+	it("rejects non-keyable match fields at compile time", () => {
+		const left = [{ id: "1", meta: { active: true } }];
+		const right = [{ userId: "1", details: { active: true } }];
+		const shouldRunTypeChecks = false as boolean;
+
+		if (shouldRunTypeChecks) {
+			// @ts-expect-error non-keyable left field
+			matchByKey(left, right, "meta", "userId");
+			// @ts-expect-error non-keyable right field
+			matchByKey(left, right, "id", "details");
+		}
+
+		expect(left).toHaveLength(1);
+		expect(right).toHaveLength(1);
+	});
 });

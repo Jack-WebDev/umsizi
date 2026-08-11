@@ -1,4 +1,5 @@
 import { requireKeys } from "./require-keys";
+import type { KeyedRecord, KeysFor, RequiredKeysResult } from "./types";
 
 /**
  * Asserts that a plain object has all of the requested own keys.
@@ -14,30 +15,44 @@ import { requireKeys } from "./require-keys";
  * ```
  */
 export function assertKeys<
-	T extends object,
-	const FirstKey extends keyof T,
-	const RestKeys extends readonly (keyof T)[],
+	T,
+	const FirstKey extends KeysFor<T>,
+	const RestKeys extends readonly KeysFor<T>[],
 >(
 	value: T,
 	firstKey: FirstKey,
 	...restKeys: RestKeys
-): asserts value is T & Required<Pick<T, FirstKey | RestKeys[number]>>;
+): asserts value is T &
+	RequiredKeysResult<T, Extract<FirstKey | RestKeys[number], PropertyKey>>;
 export function assertKeys<
-	T extends object,
-	const FirstKey extends keyof T,
-	const RestKeys extends readonly (keyof T)[],
+	T,
+	const FirstKey extends KeysFor<T>,
+	const RestKeys extends readonly KeysFor<T>[],
 >(
 	value: T,
 	keys: readonly [FirstKey, ...RestKeys],
-): asserts value is T & Required<Pick<T, FirstKey | RestKeys[number]>>;
-export function assertKeys<T extends object>(
+): asserts value is T &
+	RequiredKeysResult<T, Extract<FirstKey | RestKeys[number], PropertyKey>>;
+export function assertKeys<T>(
 	value: T,
-	keys: readonly (keyof T)[],
-): asserts value is T;
-export function assertKeys<T extends object>(
-	value: T,
-	firstKeyOrKeys: keyof T | readonly (keyof T)[],
-	...restKeys: readonly (keyof T)[]
+	keys: readonly KeysFor<T>[],
+): asserts value is T & KeyedRecord<T>;
+/**
+ * Asserts that a value contains the specified keys.
+ *
+ * @param value - The value to check.
+ * @param firstKeyOrKeys - A key to require, or an array of keys to require.
+ * @param restKeys - Additional keys to require when `firstKeyOrKeys` is a single key.
+ */
+export function assertKeys(
+	value: unknown,
+	firstKeyOrKeys: PropertyKey | readonly PropertyKey[],
+	...restKeys: readonly PropertyKey[]
 ): void {
-	requireKeys(value, firstKeyOrKeys as keyof T, ...restKeys);
+	if (Array.isArray(firstKeyOrKeys)) {
+		requireKeys(value, firstKeyOrKeys as readonly PropertyKey[]);
+		return;
+	}
+
+	requireKeys(value, firstKeyOrKeys as PropertyKey, ...restKeys);
 }

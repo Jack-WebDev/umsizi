@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
 import { set } from "../set";
 
@@ -58,5 +58,42 @@ describe("set", () => {
 		const user = { profile: { name: "Umsizi" } };
 
 		expect(set(user, [], "ignored")).toBe(user);
+	});
+
+	it("preserves tuple-path inference for overwritten leaf values", () => {
+		const user = {
+			profile: {
+				name: "Umsizi" as const,
+				address: {
+					city: "Durban" as const,
+				},
+			},
+			active: true as const,
+		} as const;
+		const result = set(
+			user,
+			["profile", "address", "city"] as const,
+			"Cape Town" as const,
+		);
+
+		expectTypeOf(result.profile.name).toEqualTypeOf<"Umsizi">();
+		expectTypeOf(result.profile.address.city).toEqualTypeOf<"Cape Town">();
+		expectTypeOf(result.active).toEqualTypeOf<true>();
+	});
+
+	it("widens tuple-path writes when creating new nested properties", () => {
+		const result = set(
+			{ profile: {} },
+			["profile", "nickname"] as const,
+			"Umsizi",
+		);
+
+		expectTypeOf(result.profile.nickname).toEqualTypeOf<string>();
+	});
+
+	it("returns a loose record type for string paths", () => {
+		const result = set({}, "profile.address.city", "Durban");
+
+		expectTypeOf(result).toEqualTypeOf<Record<string, unknown>>();
 	});
 });

@@ -29,6 +29,15 @@ describe("typedFromEntries", () => {
 		).toEqual({ name: "second" });
 	});
 
+	it("infers only the last value type for duplicate keys", () => {
+		const value = typedFromEntries([
+			["name", "first"],
+			["name", "second"],
+		] as const);
+
+		expectTypeOf(value).toEqualTypeOf<{ name: "second" }>();
+	});
+
 	it("preserves reconstructed object typing", () => {
 		const value = typedFromEntries([
 			["id", "1"],
